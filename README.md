@@ -1,9 +1,6 @@
-# Airbnb JavaScript Style Guide() {
+# Tipplr JavaScript Style Guide() {
 
-*A mostly reasonable approach to JavaScript*
-
-[![Downloads](https://img.shields.io/npm/dm/eslint-config-airbnb.svg)](https://www.npmjs.com/package/eslint-config-airbnb)
-[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/airbnb/javascript?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+*A mostly reasonable approach to JavaScript, originally written by [Airbnb](http://airbnb.io/projects/javascript/)*
 
 Other Style Guides
  - [ES5](es5/)
@@ -2268,6 +2265,7 @@ Other Style Guides
 (The MIT License)
 
 Copyright (c) 2014 Airbnb
+Copyright (c) 2015 Tipplr
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
