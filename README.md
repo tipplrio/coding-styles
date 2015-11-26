@@ -2312,19 +2312,19 @@ Other Style Guides
 
 - [27.1](#27.1) <a name='27.1'></a> This is a collection of links to the various ECMAScript 6 features.
 
-  1. [Arrow Functions](#8-arrow-functions)
-  2. [Classes](#9-constructors)
-  3. [Object Shorthand](#3.5)
-  4. [Object Concise](#3.6)
-  5. [Object Computed Properties](#3.4)
-  6. [Template Strings](#6.4)
-  7. [Destructuring](#5-destructuring)
-  8. [Default Parameters](#7.7)
-  9. [Rest](#7.6)
-  10. [Array Spreads](#4.3)
-  11. [Let and Const](#2-references)
-  12. [Iterators and Generators](#11-iterators-and-generators)
-  13. [Modules](#10-modules)
+  + [Arrow Functions](#8-arrow-functions)
+  + [Classes](#9-constructors)
+  + [Object Shorthand](#3.5)
+  + [Object Concise](#3.6)
+  + [Object Computed Properties](#3.4)
+  + [Template Strings](#6.4)
+  + [Destructuring](#5-destructuring)
+  + [Default Parameters](#7.7)
+  + [Rest](#7.6)
+  + [Array Spreads](#4.3)
+  + [Let and Const](#2-references)
+  + [Iterators and Generators](#11-iterators-and-generators)
+  + [Modules](#10-modules)
 
 **[⬆ back to top](#table-of-contents)**
 
