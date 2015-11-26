@@ -1,11 +1,12 @@
-## `.eslintrc`
+# Linters
 
-Our `.eslintrc` requires the following NPM packages:
+## `.eslintrc.json`
 
-```
-npm install --save-dev \
-  eslint-config-airbnb \
-  eslint \
-  babel-eslint \
-  eslint-plugin-react
+Our `.eslintrc.json` requires the following NPM packages:
+
+```shell
+$ npm install --save-dev \
+> eslint \
+> eslint-plugin-react \
+> eslint-config-tipplr
 ```
