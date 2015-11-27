@@ -2355,14 +2355,14 @@ Other Style Guides
 
 - [29.1](#29.1) <a name='29.1'></a> A top-level directory layout:
 
-      .
-      ├─ build      # Compiled and transpiled files
-      ├─ docs       # Documentation files
-      ├─ src        # Source files
-      ├─ tests      # Automated tests
-      ├─ bin        # Tools and utilities
-      ├─ LICENSE
-      └─ README.md
+        .
+        ├─ build      # Compiled and transpiled files
+        ├─ docs       # Documentation files
+        ├─ src        # Source files
+        ├─ tests      # Automated tests
+        ├─ bin        # Tools and utilities
+        ├─ LICENSE
+        └─ README.md
 
 - [29.2](#29.2) <a name='29.2'></a> For some samples refer to [Folder Structure Conventions](https://github.com/kriasoft/Folder-Structure-Conventions) by Konstantin Tarkus
 
