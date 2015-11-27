@@ -38,10 +38,11 @@ Other Style Guides
 26. [ECMAScript 5 Compatibility](#26-ecmascript-5-compatibility)
 27. [ECMAScript 6 Styles](#27-ecmascript-6-styles)
 28. [Testing](#28-testing)
-29. [Performance](#29-performance)
-30. [Resources](#30-resources)
-31. [Contributors](#31-contributors)
-32. [License](#32-license)
+29. [Directory Structure](#29-directory-structure)
+30. [Performance](#30-performance)
+31. [Resources](#31-resources)
+32. [Contributors](#32-contributors)
+33. [License](#33-license)
 
 
 ## 1. Types
@@ -2331,7 +2332,7 @@ Other Style Guides
 
 ## 28. Testing
 
-- [28.1](#28.1) <a name="28.1"></a> **Yup.**
+- [28.1](#28.1) <a name='28.1'></a> **Yup.**
 
   ```javascript
   function () {
@@ -2339,7 +2340,7 @@ Other Style Guides
   }
   ```
 
-- [28.2](#28.2) <a name="28.2"></a> **No, but seriously**:
+- [28.2](#28.2) <a name='28.2'></a> **No, but seriously**:
   + Whichever testing framework you use, you should be writing tests!
   + Strive to write many small pure functions, and minimize where mutations occur.
   + Be cautious about stubs and mocks - they can make your tests more brittle.
@@ -2350,7 +2351,25 @@ Other Style Guides
 **[⬆ back to top](#table-of-contents)**
 
 
-## 29. Performance
+## 29. Directory Structure
+
+- [29.1](#29.1) <a name='29.1'></a> A top-level directory layout:
+
+      .
+      ├─ build      # Compiled and transpiled files
+      ├─ docs       # Documentation files
+      ├─ src        # Source files
+      ├─ tests      # Automated tests
+      ├─ bin        # Tools and utilities
+      ├─ LICENSE
+      └─ README.md
+
+- [29.2](#29.2) <a name='29.2'></a> For some samples refer to [Folder Structure Conventions](https://github.com/kriasoft/Folder-Structure-Conventions) by Konstantin Tarkus
+
+**[⬆ back to top](#table-of-contents)**
+
+
+## 30. Performance
 
 - [On Layout & Web Performance](http://www.kellegous.com/j/2013/01/26/layout-performance/)
 - [String vs Array Concat](http://jsperf.com/string-vs-array-concat/2)
@@ -2364,7 +2383,7 @@ Other Style Guides
 **[⬆ back to top](#table-of-contents)**
 
 
-## 30. Resources
+## 31. Resources
 
 **Learning ES6**
 
@@ -2444,14 +2463,14 @@ Other Style Guides
 **[⬆ back to top](#table-of-contents)**
 
 
-## 31. Contributors
+## 32. Contributors
 
 - [View Contributors](https://github.com/tipplrio/styleguides/graphs/contributors)
 
 **[⬆ back to top](#table-of-contents)**
 
 
-## 32. License
+## 33. License
 
 The MIT License (MIT)
 
