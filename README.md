@@ -1785,6 +1785,16 @@ Other Style Guides
   console.log(foo[0]);
   ```
 
+  - [18.11](#18.11) <a name='18.11'></a> Add spaces inside curly braces.
+
+    ```javascript
+    // bad
+    const foo = {clark: 'kent'};
+
+    // good
+    const foo = { clark: 'kent' };
+    ```
+
 **[⬆ back to top](#table-of-contents)**
 
 
