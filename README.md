@@ -646,6 +646,21 @@ Other Style Guides
   var subtract = Function('a', 'b', 'return a - b');
   ```
 
+- [7.11](#7.11) <a name="7.11"></a> Spacing in a function signature.
+
+  > Why? Consistency is good, and you shouldn’t have to add or remove a space when adding or removing a name.
+
+  ```javascript
+  // bad
+  const f = function(){};
+  const g = function (){};
+  const h = function() {};
+
+  // good
+  const x = function () {};
+  const y = function a() {};
+  ```
+
 **[⬆ back to top](#table-of-contents)**
 
 
