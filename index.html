@@ -27,7 +27,7 @@
 <p>Other Style Guides</p>
 
 <ul>
-<li><a href="https://github.com/tipplrio/styleguides/tree/master/react">React</a></li>
+<li><a href="https://github.com/tipplrio/styleguides/blob/master/react">React</a></li>
 <li><a href="https://github.com/airbnb/css">CSS &amp; Sass</a></li>
 </ul>
 
@@ -677,6 +677,54 @@ itemsCopy <span class="pl-k">=</span> <span class="pl-smi">items</span>.<span cl
 <span class="pl-c">// still bad</span>
 <span class="pl-k">var</span> subtract <span class="pl-k">=</span> <span class="pl-c1">Function</span>(<span class="pl-s"><span class="pl-pds">'</span>a<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>b<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>return a - b<span class="pl-pds">'</span></span>);</pre></div>
 </li>
+<li>
+<p><a href="#7.11">7.11</a> <a name="7.11"></a> Spacing in a function signature.</p>
+
+<blockquote>
+<p>Why? Consistency is good, and you shouldn’t have to add or remove a space when adding or removing a name.</p>
+</blockquote>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-c">// bad</span>
+<span class="pl-k">const</span> <span class="pl-c1">f</span> <span class="pl-k">=</span> <span class="pl-k">function</span>(){};
+<span class="pl-k">const</span> <span class="pl-c1">g</span> <span class="pl-k">=</span> <span class="pl-k">function</span> (){};
+<span class="pl-k">const</span> <span class="pl-c1">h</span> <span class="pl-k">=</span> <span class="pl-k">function</span>() {};
+
+<span class="pl-c">// good</span>
+<span class="pl-k">const</span> <span class="pl-c1">x</span> <span class="pl-k">=</span> <span class="pl-k">function</span> () {};
+<span class="pl-k">const</span> <span class="pl-c1">y</span> <span class="pl-k">=</span> <span class="pl-k">function</span> <span class="pl-en">a</span>() {};</pre></div>
+</li>
+<li>
+<p><a href="#7.12">7.12</a> <a name="7.12"></a> Never mutate parameters.</p>
+
+<blockquote>
+<p>Why? Overwriting parameters can lead to unexpected behavior, especially when accessing the <code>arguments</code> object. Manipulating objects passed in as parameters can cause unwanted variable side effects in the original caller.</p>
+</blockquote>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-c">// bad</span>
+<span class="pl-k">function</span> <span class="pl-en">f1</span>(<span class="pl-smi">a</span>){
+  a <span class="pl-k">=</span> <span class="pl-c1">1</span>;
+}
+
+<span class="pl-k">function</span> <span class="pl-en">f2</span>(<span class="pl-smi">a</span>){
+  <span class="pl-k">if</span> (<span class="pl-k">!</span>a) { a <span class="pl-k">=</span> <span class="pl-c1">1</span>; }
+}
+
+<span class="pl-k">function</span> <span class="pl-en">f3</span>(<span class="pl-smi">obj</span>){
+  <span class="pl-smi">obj</span>.<span class="pl-smi">key</span> <span class="pl-k">=</span> <span class="pl-c1">1</span>;
+};
+
+<span class="pl-c">// good</span>
+<span class="pl-k">function</span> <span class="pl-en">f4</span>(<span class="pl-smi">a</span>){
+  <span class="pl-k">const</span> <span class="pl-c1">b</span> <span class="pl-k">=</span> a <span class="pl-k">||</span> <span class="pl-c1">1</span>;
+}
+
+<span class="pl-k">function</span> <span class="pl-en">f5</span>(<span class="pl-smi">a</span> <span class="pl-k">=</span> <span class="pl-c1">1</span>){
+}
+
+<span class="pl-k">function</span> <span class="pl-en">f6</span>(<span class="pl-smi">obj</span>){
+  <span class="pl-k">const</span> <span class="pl-c1">key</span> <span class="pl-k">=</span> <span class="pl-smi">Object</span>.<span class="pl-c1">prototype</span>.<span class="pl-smi">hasOwnProperty</span>.<span class="pl-c1">call</span>(obj, <span class="pl-s"><span class="pl-pds">'</span>key<span class="pl-pds">'</span></span>) <span class="pl-k">?</span> <span class="pl-smi">obj</span>.<span class="pl-smi">key</span> <span class="pl-k">:</span> <span class="pl-c1">1</span>;
+};</pre></div>
+</li>
 </ul>
 
 <p><strong><a href="#table-of-contents">⬆ back to top</a></strong></p>
@@ -779,22 +827,22 @@ itemsCopy <span class="pl-k">=</span> <span class="pl-smi">items</span>.<span cl
 
 <div class="highlight highlight-source-js"><pre><span class="pl-c">// bad</span>
 <span class="pl-k">function</span> <span class="pl-en">Queue</span>(<span class="pl-smi">contents</span> <span class="pl-k">=</span> []) {
-  <span class="pl-smi">this</span>.<span class="pl-smi">_queue</span> <span class="pl-k">=</span> [...<span class="pl-smi">contents</span>];
+  <span class="pl-v">this</span>.<span class="pl-smi">_queue</span> <span class="pl-k">=</span> [...<span class="pl-smi">contents</span>];
 }
 <span class="pl-c1">Queue</span>.<span class="pl-c1">prototype</span>.<span class="pl-en">pop</span> <span class="pl-k">=</span> <span class="pl-k">function</span>() {
-  <span class="pl-k">const</span> <span class="pl-c1">value</span> <span class="pl-k">=</span> <span class="pl-smi">this</span>.<span class="pl-smi">_queue</span>[<span class="pl-c1">0</span>];
-  <span class="pl-smi">this</span>.<span class="pl-smi">_queue</span>.<span class="pl-c1">splice</span>(<span class="pl-c1">0</span>, <span class="pl-c1">1</span>);
+  <span class="pl-k">const</span> <span class="pl-c1">value</span> <span class="pl-k">=</span> <span class="pl-v">this</span>.<span class="pl-smi">_queue</span>[<span class="pl-c1">0</span>];
+  <span class="pl-v">this</span>.<span class="pl-smi">_queue</span>.<span class="pl-c1">splice</span>(<span class="pl-c1">0</span>, <span class="pl-c1">1</span>);
   <span class="pl-k">return</span> value;
 };
 
 <span class="pl-c">// good</span>
 <span class="pl-k">class</span> <span class="pl-en">Queue</span> {
   <span class="pl-en">constructor</span>(<span class="pl-smi">contents</span> <span class="pl-k">=</span> []) {
-    <span class="pl-smi">this</span>.<span class="pl-smi">_queue</span> <span class="pl-k">=</span> [...<span class="pl-smi">contents</span>];
+    <span class="pl-v">this</span>.<span class="pl-smi">_queue</span> <span class="pl-k">=</span> [...<span class="pl-smi">contents</span>];
   }
   <span class="pl-en">pop</span>() {
-    <span class="pl-k">const</span> <span class="pl-c1">value</span> <span class="pl-k">=</span> <span class="pl-smi">this</span>.<span class="pl-smi">_queue</span>[<span class="pl-c1">0</span>];
-    <span class="pl-smi">this</span>.<span class="pl-smi">_queue</span>.<span class="pl-c1">splice</span>(<span class="pl-c1">0</span>, <span class="pl-c1">1</span>);
+    <span class="pl-k">const</span> <span class="pl-c1">value</span> <span class="pl-k">=</span> <span class="pl-v">this</span>.<span class="pl-smi">_queue</span>[<span class="pl-c1">0</span>];
+    <span class="pl-v">this</span>.<span class="pl-smi">_queue</span>.<span class="pl-c1">splice</span>(<span class="pl-c1">0</span>, <span class="pl-c1">1</span>);
     <span class="pl-k">return</span> value;
   }
 }</pre></div>
@@ -802,22 +850,22 @@ itemsCopy <span class="pl-k">=</span> <span class="pl-smi">items</span>.<span cl
 <p>(<a href="#26-ecmascript-5-compatibility"><strong>ES5</strong></a>) Assign methods to the prototype object, instead of overwriting the prototype with a new object. Overwriting the prototype makes inheritance impossible: by resetting the prototype you'll overwrite the base!</p>
 
 <div class="highlight highlight-source-js"><pre><span class="pl-k">function</span> <span class="pl-en">Queue</span>(<span class="pl-smi">contents</span> <span class="pl-k">=</span> []) {
-  <span class="pl-smi">this</span>.<span class="pl-smi">_queue</span> <span class="pl-k">=</span> [...<span class="pl-smi">contents</span>];
+  <span class="pl-v">this</span>.<span class="pl-smi">_queue</span> <span class="pl-k">=</span> [...<span class="pl-smi">contents</span>];
 }
 
 <span class="pl-c">// bad</span>
 <span class="pl-c1">Queue</span>.<span class="pl-c1">prototype</span> <span class="pl-k">=</span> {
   <span class="pl-en">pop</span><span class="pl-k">:</span> <span class="pl-k">function</span> <span class="pl-en">pop</span>() {
-    <span class="pl-k">var</span> value <span class="pl-k">=</span> <span class="pl-smi">this</span>.<span class="pl-smi">_queue</span>[<span class="pl-c1">0</span>];
-    <span class="pl-smi">this</span>.<span class="pl-smi">_queue</span>.<span class="pl-c1">splice</span>(<span class="pl-c1">0</span>, <span class="pl-c1">1</span>);
+    <span class="pl-k">var</span> value <span class="pl-k">=</span> <span class="pl-v">this</span>.<span class="pl-smi">_queue</span>[<span class="pl-c1">0</span>];
+    <span class="pl-v">this</span>.<span class="pl-smi">_queue</span>.<span class="pl-c1">splice</span>(<span class="pl-c1">0</span>, <span class="pl-c1">1</span>);
     <span class="pl-k">return</span> value;
   }
 };
 
 <span class="pl-c">// good</span>
 <span class="pl-c1">Queue</span>.<span class="pl-c1">prototype</span>.<span class="pl-en">pop</span> <span class="pl-k">=</span> <span class="pl-k">function</span>() {
-  <span class="pl-k">const</span> <span class="pl-c1">value</span> <span class="pl-k">=</span> <span class="pl-smi">this</span>.<span class="pl-smi">_queue</span>[<span class="pl-c1">0</span>];
-  <span class="pl-smi">this</span>.<span class="pl-smi">_queue</span>.<span class="pl-c1">splice</span>(<span class="pl-c1">0</span>, <span class="pl-c1">1</span>);
+  <span class="pl-k">const</span> <span class="pl-c1">value</span> <span class="pl-k">=</span> <span class="pl-v">this</span>.<span class="pl-smi">_queue</span>[<span class="pl-c1">0</span>];
+  <span class="pl-v">this</span>.<span class="pl-smi">_queue</span>.<span class="pl-c1">splice</span>(<span class="pl-c1">0</span>, <span class="pl-c1">1</span>);
   <span class="pl-k">return</span> value;
 };</pre></div>
 </li>
@@ -835,13 +883,13 @@ itemsCopy <span class="pl-k">=</span> <span class="pl-smi">items</span>.<span cl
 }
 <span class="pl-en">inherits</span>(PeekableQueue, Queue);
 <span class="pl-c1">PeekableQueue</span>.<span class="pl-c1">prototype</span>.<span class="pl-en">peek</span> <span class="pl-k">=</span> <span class="pl-k">function</span>() {
-  <span class="pl-k">return</span> <span class="pl-smi">this</span>.<span class="pl-smi">_queue</span>[<span class="pl-c1">0</span>];
+  <span class="pl-k">return</span> <span class="pl-v">this</span>.<span class="pl-smi">_queue</span>[<span class="pl-c1">0</span>];
 }
 
 <span class="pl-c">// good</span>
 <span class="pl-k">class</span> <span class="pl-en">PeekableQueue</span> <span class="pl-k">extends</span> <span class="pl-en">Queue</span> {
   <span class="pl-en">peek</span>() {
-    <span class="pl-k">return</span> <span class="pl-smi">this</span>.<span class="pl-smi">_queue</span>[<span class="pl-c1">0</span>];
+    <span class="pl-k">return</span> <span class="pl-v">this</span>.<span class="pl-smi">_queue</span>[<span class="pl-c1">0</span>];
   }
 }</pre></div>
 </li>
@@ -850,12 +898,12 @@ itemsCopy <span class="pl-k">=</span> <span class="pl-smi">items</span>.<span cl
 
 <div class="highlight highlight-source-js"><pre><span class="pl-c">// bad</span>
 <span class="pl-c1">Jedi</span>.<span class="pl-c1">prototype</span>.<span class="pl-en">jump</span> <span class="pl-k">=</span> <span class="pl-k">function</span>() {
-  <span class="pl-smi">this</span>.<span class="pl-smi">jumping</span> <span class="pl-k">=</span> <span class="pl-c1">true</span>;
+  <span class="pl-v">this</span>.<span class="pl-smi">jumping</span> <span class="pl-k">=</span> <span class="pl-c1">true</span>;
   <span class="pl-k">return</span> <span class="pl-c1">true</span>;
 };
 
 <span class="pl-c1">Jedi</span>.<span class="pl-c1">prototype</span>.<span class="pl-en">setHeight</span> <span class="pl-k">=</span> <span class="pl-k">function</span>(<span class="pl-smi">height</span>) {
-  <span class="pl-smi">this</span>.<span class="pl-c1">height</span> <span class="pl-k">=</span> height;
+  <span class="pl-v">this</span>.<span class="pl-c1">height</span> <span class="pl-k">=</span> height;
 };
 
 <span class="pl-k">const</span> <span class="pl-c1">luke</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Jedi</span>();
@@ -867,12 +915,12 @@ itemsCopy <span class="pl-k">=</span> <span class="pl-smi">items</span>.<span cl
 <span class="pl-c">// good</span>
 <span class="pl-k">class</span> <span class="pl-en">Jedi</span> {
   <span class="pl-en">jump</span>() {
-    <span class="pl-smi">this</span>.<span class="pl-smi">jumping</span> <span class="pl-k">=</span> <span class="pl-c1">true</span>;
+    <span class="pl-v">this</span>.<span class="pl-smi">jumping</span> <span class="pl-k">=</span> <span class="pl-c1">true</span>;
     <span class="pl-k">return</span> <span class="pl-v">this</span>;
   }
 
   <span class="pl-en">setHeight</span>(<span class="pl-smi">height</span>) {
-    <span class="pl-smi">this</span>.<span class="pl-c1">height</span> <span class="pl-k">=</span> height;
+    <span class="pl-v">this</span>.<span class="pl-c1">height</span> <span class="pl-k">=</span> height;
     <span class="pl-k">return</span> <span class="pl-v">this</span>;
   }
 }
@@ -887,15 +935,15 @@ itemsCopy <span class="pl-k">=</span> <span class="pl-smi">items</span>.<span cl
 
 <div class="highlight highlight-source-js"><pre><span class="pl-k">class</span> <span class="pl-en">Jedi</span> {
   <span class="pl-en">constructor</span>(<span class="pl-smi">options</span> <span class="pl-k">=</span> {}) {
-    <span class="pl-smi">this</span>.<span class="pl-c1">name</span> <span class="pl-k">=</span> <span class="pl-smi">options</span>.<span class="pl-c1">name</span> <span class="pl-k">||</span> <span class="pl-s"><span class="pl-pds">'</span>no name<span class="pl-pds">'</span></span>;
+    <span class="pl-v">this</span>.<span class="pl-c1">name</span> <span class="pl-k">=</span> <span class="pl-smi">options</span>.<span class="pl-c1">name</span> <span class="pl-k">||</span> <span class="pl-s"><span class="pl-pds">'</span>no name<span class="pl-pds">'</span></span>;
   }
 
   <span class="pl-en">getName</span>() {
-    <span class="pl-k">return</span> <span class="pl-smi">this</span>.<span class="pl-c1">name</span>;
+    <span class="pl-k">return</span> <span class="pl-v">this</span>.<span class="pl-c1">name</span>;
   }
 
   <span class="pl-en">toString</span>() {
-    <span class="pl-k">return</span> <span class="pl-s"><span class="pl-pds">`</span>Jedi - <span class="pl-s1"><span class="pl-pse">${</span><span class="pl-smi">this</span>.<span class="pl-en">getName</span>()<span class="pl-pse">}</span></span><span class="pl-pds">`</span></span>;
+    <span class="pl-k">return</span> <span class="pl-s"><span class="pl-pds">`</span>Jedi - <span class="pl-s1"><span class="pl-pse">${</span><span class="pl-v">this</span>.<span class="pl-en">getName</span>()<span class="pl-pse">}</span></span><span class="pl-pds">`</span></span>;
   }
 }</pre></div>
 </li>
@@ -966,18 +1014,18 @@ itemsCopy <span class="pl-k">=</span> <span class="pl-smi">items</span>.<span cl
 <span class="pl-k">!</span><span class="pl-k">function</span>(<span class="pl-smi">global</span>) {
   <span class="pl-s"><span class="pl-pds">'</span>use strict<span class="pl-pds">'</span></span>;
 
-  <span class="pl-k">var</span> previousFancyInput <span class="pl-k">=</span> <span class="pl-smi">global</span>.<span class="pl-c1">F</span>ancyInput;
+  <span class="pl-k">var</span> previousFancyInput <span class="pl-k">=</span> <span class="pl-smi">global</span>.<span class="pl-smi">FancyInput</span>;
 
   <span class="pl-k">function</span> <span class="pl-en">FancyInput</span>(<span class="pl-smi">options</span>) {
-    <span class="pl-smi">this</span>.<span class="pl-c1">options</span> <span class="pl-k">=</span> options <span class="pl-k">||</span> {};
+    <span class="pl-v">this</span>.<span class="pl-c1">options</span> <span class="pl-k">=</span> options <span class="pl-k">||</span> {};
   }
 
   <span class="pl-c1">FancyInput</span>.<span class="pl-en">noConflict</span> <span class="pl-k">=</span> <span class="pl-k">function</span> <span class="pl-en">noConflict</span>() {
-    <span class="pl-smi">global</span>.<span class="pl-c1">F</span>ancyInput <span class="pl-k">=</span> previousFancyInput;
+    <span class="pl-smi">global</span>.<span class="pl-smi">FancyInput</span> <span class="pl-k">=</span> previousFancyInput;
     <span class="pl-k">return</span> FancyInput;
   };
 
-  <span class="pl-smi">global</span>.<span class="pl-c1">F</span>ancyInput <span class="pl-k">=</span> FancyInput;
+  <span class="pl-smi">global</span>.<span class="pl-smi">FancyInput</span> <span class="pl-k">=</span> FancyInput;
 }(<span class="pl-v">this</span>);</pre></div>
 </li>
 </ul>
@@ -1154,7 +1202,7 @@ superPower <span class="pl-k">=</span> <span class="pl-k">new</span> <span class
     <span class="pl-k">return</span> <span class="pl-c1">false</span>;
   }
 
-  <span class="pl-smi">this</span>.<span class="pl-en">setFirstName</span>(name);
+  <span class="pl-v">this</span>.<span class="pl-en">setFirstName</span>(name);
 
   <span class="pl-k">return</span> <span class="pl-c1">true</span>;
 }
@@ -1166,7 +1214,7 @@ superPower <span class="pl-k">=</span> <span class="pl-k">new</span> <span class
   }
 
   <span class="pl-k">const</span> <span class="pl-c1">name</span> <span class="pl-k">=</span> <span class="pl-en">getName</span>();
-  <span class="pl-smi">this</span>.<span class="pl-en">setFirstName</span>(name);
+  <span class="pl-v">this</span>.<span class="pl-en">setFirstName</span>(name);
 
   <span class="pl-k">return</span> <span class="pl-c1">true</span>;
 }</pre></div>
@@ -1213,7 +1261,7 @@ superPower <span class="pl-k">=</span> <span class="pl-k">new</span> <span class
     <span class="pl-k">return</span> <span class="pl-c1">false</span>;
   }
 
-  <span class="pl-smi">this</span>.<span class="pl-en">setFirstName</span>(name);
+  <span class="pl-v">this</span>.<span class="pl-en">setFirstName</span>(name);
 
   <span class="pl-k">return</span> <span class="pl-c1">true</span>;
 }
@@ -1227,7 +1275,7 @@ superPower <span class="pl-k">=</span> <span class="pl-k">new</span> <span class
   }
 
   name <span class="pl-k">=</span> <span class="pl-en">getName</span>();
-  <span class="pl-smi">this</span>.<span class="pl-en">setFirstName</span>(name);
+  <span class="pl-v">this</span>.<span class="pl-en">setFirstName</span>(name);
 
   <span class="pl-k">return</span> <span class="pl-c1">true</span>;
 }</pre></div>
@@ -1526,7 +1574,7 @@ superPower <span class="pl-k">=</span> <span class="pl-k">new</span> <span class
 <span class="pl-k">function</span> <span class="pl-en">getType</span>() {
   <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-s"><span class="pl-pds">'</span>fetching type...<span class="pl-pds">'</span></span>);
   <span class="pl-c">// set the default type to 'no type'</span>
-  <span class="pl-k">const</span> <span class="pl-c1">type</span> <span class="pl-k">=</span> <span class="pl-smi">this</span>.<span class="pl-smi">_type</span> <span class="pl-k">||</span> <span class="pl-s"><span class="pl-pds">'</span>no type<span class="pl-pds">'</span></span>;
+  <span class="pl-k">const</span> <span class="pl-c1">type</span> <span class="pl-k">=</span> <span class="pl-v">this</span>.<span class="pl-smi">_type</span> <span class="pl-k">||</span> <span class="pl-s"><span class="pl-pds">'</span>no type<span class="pl-pds">'</span></span>;
 
   <span class="pl-k">return</span> type;
 }
@@ -1536,7 +1584,7 @@ superPower <span class="pl-k">=</span> <span class="pl-k">new</span> <span class
   <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-s"><span class="pl-pds">'</span>fetching type...<span class="pl-pds">'</span></span>);
 
   <span class="pl-c">// set the default type to 'no type'</span>
-  <span class="pl-k">const</span> <span class="pl-c1">type</span> <span class="pl-k">=</span> <span class="pl-smi">this</span>.<span class="pl-smi">_type</span> <span class="pl-k">||</span> <span class="pl-s"><span class="pl-pds">'</span>no type<span class="pl-pds">'</span></span>;
+  <span class="pl-k">const</span> <span class="pl-c1">type</span> <span class="pl-k">=</span> <span class="pl-v">this</span>.<span class="pl-smi">_type</span> <span class="pl-k">||</span> <span class="pl-s"><span class="pl-pds">'</span>no type<span class="pl-pds">'</span></span>;
 
   <span class="pl-k">return</span> type;
 }
@@ -1544,7 +1592,7 @@ superPower <span class="pl-k">=</span> <span class="pl-k">new</span> <span class
 <span class="pl-c">// also good</span>
 <span class="pl-k">function</span> <span class="pl-en">getType</span>() {
   <span class="pl-c">// set the default type to 'no type'</span>
-  <span class="pl-k">const</span> <span class="pl-c1">type</span> <span class="pl-k">=</span> <span class="pl-smi">this</span>.<span class="pl-smi">_type</span> <span class="pl-k">||</span> <span class="pl-s"><span class="pl-pds">'</span>no type<span class="pl-pds">'</span></span>;
+  <span class="pl-k">const</span> <span class="pl-c1">type</span> <span class="pl-k">=</span> <span class="pl-v">this</span>.<span class="pl-smi">_type</span> <span class="pl-k">||</span> <span class="pl-s"><span class="pl-pds">'</span>no type<span class="pl-pds">'</span></span>;
 
   <span class="pl-k">return</span> type;
 }</pre></div>
@@ -1570,7 +1618,7 @@ superPower <span class="pl-k">=</span> <span class="pl-k">new</span> <span class
     <span class="pl-v">super</span>();
 
     <span class="pl-c">// TODO: total should be configurable by an options param</span>
-    <span class="pl-smi">this</span>.<span class="pl-smi">total</span> <span class="pl-k">=</span> <span class="pl-c1">0</span>;
+    <span class="pl-v">this</span>.<span class="pl-smi">total</span> <span class="pl-k">=</span> <span class="pl-c1">0</span>;
   }
 }</pre></div>
 </li>
@@ -1680,10 +1728,10 @@ superPower <span class="pl-k">=</span> <span class="pl-k">new</span> <span class
 <p><a href="#18.6">18.6</a> <a name="18.6"></a> Use indentation when making long method chains. Use a leading dot, which emphasizes that the line is a method call, not a new statement.</p>
 
 <div class="highlight highlight-source-js"><pre><span class="pl-c">// bad</span>
-$(<span class="pl-s"><span class="pl-pds">'</span>#items<span class="pl-pds">'</span></span>).<span class="pl-c1">find</span>(<span class="pl-s"><span class="pl-pds">'</span>.selected<span class="pl-pds">'</span></span>).<span class="pl-en">highlight</span>().<span class="pl-en">end</span>().<span class="pl-c1">find</span>(<span class="pl-s"><span class="pl-pds">'</span>.open<span class="pl-pds">'</span></span>).<span class="pl-en">updateCount</span>();
+<span class="pl-en">$</span>(<span class="pl-s"><span class="pl-pds">'</span>#items<span class="pl-pds">'</span></span>).<span class="pl-c1">find</span>(<span class="pl-s"><span class="pl-pds">'</span>.selected<span class="pl-pds">'</span></span>).<span class="pl-en">highlight</span>().<span class="pl-en">end</span>().<span class="pl-c1">find</span>(<span class="pl-s"><span class="pl-pds">'</span>.open<span class="pl-pds">'</span></span>).<span class="pl-en">updateCount</span>();
 
 <span class="pl-c">// bad</span>
-$(<span class="pl-s"><span class="pl-pds">'</span>#items<span class="pl-pds">'</span></span>).
+<span class="pl-en">$</span>(<span class="pl-s"><span class="pl-pds">'</span>#items<span class="pl-pds">'</span></span>).
   <span class="pl-c1">find</span>(<span class="pl-s"><span class="pl-pds">'</span>.selected<span class="pl-pds">'</span></span>).
     <span class="pl-en">highlight</span>().
     <span class="pl-en">end</span>().
@@ -1691,7 +1739,7 @@ $(<span class="pl-s"><span class="pl-pds">'</span>#items<span class="pl-pds">'</
     <span class="pl-en">updateCount</span>();
 
 <span class="pl-c">// good</span>
-$(<span class="pl-s"><span class="pl-pds">'</span>#items<span class="pl-pds">'</span></span>)
+<span class="pl-en">$</span>(<span class="pl-s"><span class="pl-pds">'</span>#items<span class="pl-pds">'</span></span>)
   .<span class="pl-c1">find</span>(<span class="pl-s"><span class="pl-pds">'</span>.selected<span class="pl-pds">'</span></span>)
     .<span class="pl-en">highlight</span>()
     .<span class="pl-en">end</span>()
@@ -1800,6 +1848,52 @@ $(<span class="pl-s"><span class="pl-pds">'</span>#items<span class="pl-pds">'</
 } <span class="pl-k">else</span> {
   <span class="pl-en">console</span>.<span class="pl-c1">log</span>(foo);
 }</pre></div>
+</li>
+<li>
+<p><a href="#18.9">18.9</a> <a name="18.9"></a> Do not add spaces inside parentheses.</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-c">// bad</span>
+<span class="pl-k">function</span> <span class="pl-en">bar</span>( <span class="pl-smi">foo</span> ) {
+  <span class="pl-k">return</span> foo;
+}
+
+<span class="pl-c">// good</span>
+<span class="pl-k">function</span> <span class="pl-en">bar</span>(<span class="pl-smi">foo</span>) {
+  <span class="pl-k">return</span> foo;
+}
+
+<span class="pl-c">// bad</span>
+<span class="pl-k">if</span> ( foo ) {
+  <span class="pl-en">console</span>.<span class="pl-c1">log</span>(foo);
+}
+
+<span class="pl-c">// good</span>
+<span class="pl-k">if</span> (foo) {
+  <span class="pl-en">console</span>.<span class="pl-c1">log</span>(foo);
+}</pre></div>
+</li>
+<li>
+<p><a href="#18.10">18.10</a> <a name="18.10"></a> Do not add spaces inside brackets.</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-c">// bad</span>
+<span class="pl-k">const</span> <span class="pl-c1">foo</span> <span class="pl-k">=</span> [ <span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span> ];
+<span class="pl-en">console</span>.<span class="pl-c1">log</span>(foo[ <span class="pl-c1">0</span> ]);
+
+<span class="pl-c">// good</span>
+<span class="pl-k">const</span> <span class="pl-c1">foo</span> <span class="pl-k">=</span> [<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>];
+<span class="pl-en">console</span>.<span class="pl-c1">log</span>(foo[<span class="pl-c1">0</span>]);</pre></div>
+
+<ul>
+<li>
+<p><a href="#18.11">18.11</a> <a name="18.11"></a> Add spaces inside curly braces.</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-c">// bad</span>
+<span class="pl-k">const</span> <span class="pl-c1">foo</span> <span class="pl-k">=</span> {clark<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>kent<span class="pl-pds">'</span></span>};
+
+<span class="pl-c">// good</span>
+<span class="pl-k">const</span> <span class="pl-c1">foo</span> <span class="pl-k">=</span> { clark<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>kent<span class="pl-pds">'</span></span> };</pre></div>
+</li>
+</ul>
 </li>
 </ul>
 
@@ -1960,10 +2054,10 @@ $(<span class="pl-s"><span class="pl-pds">'</span>#items<span class="pl-pds">'</
 <div class="highlight highlight-source-js"><pre><span class="pl-c">//  =&gt; this.reviewScore = 9;</span>
 
 <span class="pl-c">// bad</span>
-<span class="pl-k">const</span> <span class="pl-c1">totalScore</span> <span class="pl-k">=</span> <span class="pl-smi">this</span>.<span class="pl-smi">reviewScore</span> <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>;
+<span class="pl-k">const</span> <span class="pl-c1">totalScore</span> <span class="pl-k">=</span> <span class="pl-v">this</span>.<span class="pl-smi">reviewScore</span> <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>;
 
 <span class="pl-c">// good</span>
-<span class="pl-k">const</span> <span class="pl-c1">totalScore</span> <span class="pl-k">=</span> <span class="pl-c1">String</span>(<span class="pl-smi">this</span>.<span class="pl-smi">reviewScore</span>);</pre></div>
+<span class="pl-k">const</span> <span class="pl-c1">totalScore</span> <span class="pl-k">=</span> <span class="pl-c1">String</span>(<span class="pl-v">this</span>.<span class="pl-smi">reviewScore</span>);</pre></div>
 </li>
 <li>
 <p><a href="#21.3">21.3</a> <a name="21.3"></a> Numbers: Use <code>Number</code> for type casting and <code>parseInt</code> always with a radix for parsing strings.</p>
@@ -2058,7 +2152,7 @@ $(<span class="pl-s"><span class="pl-pds">'</span>#items<span class="pl-pds">'</
 
 <div class="highlight highlight-source-js"><pre><span class="pl-c">// bad</span>
 <span class="pl-k">function</span> <span class="pl-en">user</span>(<span class="pl-smi">options</span>) {
-  <span class="pl-smi">this</span>.<span class="pl-c1">name</span> <span class="pl-k">=</span> <span class="pl-smi">options</span>.<span class="pl-c1">name</span>;
+  <span class="pl-v">this</span>.<span class="pl-c1">name</span> <span class="pl-k">=</span> <span class="pl-smi">options</span>.<span class="pl-c1">name</span>;
 }
 
 <span class="pl-k">const</span> <span class="pl-c1">bad</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">user</span>({
@@ -2068,7 +2162,7 @@ $(<span class="pl-s"><span class="pl-pds">'</span>#items<span class="pl-pds">'</
 <span class="pl-c">// good</span>
 <span class="pl-k">class</span> <span class="pl-en">User</span> {
   <span class="pl-en">constructor</span>(<span class="pl-smi">options</span>) {
-    <span class="pl-smi">this</span>.<span class="pl-c1">name</span> <span class="pl-k">=</span> <span class="pl-smi">options</span>.<span class="pl-c1">name</span>;
+    <span class="pl-v">this</span>.<span class="pl-c1">name</span> <span class="pl-k">=</span> <span class="pl-smi">options</span>.<span class="pl-c1">name</span>;
   }
 }
 
@@ -2080,11 +2174,11 @@ $(<span class="pl-s"><span class="pl-pds">'</span>#items<span class="pl-pds">'</
 <p><a href="#22.4">22.4</a> <a name="22.4"></a> Use a leading underscore <code>_</code> when naming private properties.</p>
 
 <div class="highlight highlight-source-js"><pre><span class="pl-c">// bad</span>
-<span class="pl-smi">this</span>.<span class="pl-smi">__firstName__</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>Panda<span class="pl-pds">'</span></span>;
-<span class="pl-smi">this</span>.<span class="pl-smi">firstName_</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>Panda<span class="pl-pds">'</span></span>;
+<span class="pl-v">this</span>.<span class="pl-smi">__firstName__</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>Panda<span class="pl-pds">'</span></span>;
+<span class="pl-v">this</span>.<span class="pl-smi">firstName_</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>Panda<span class="pl-pds">'</span></span>;
 
 <span class="pl-c">// good</span>
-<span class="pl-smi">this</span>.<span class="pl-smi">_firstName</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>Panda<span class="pl-pds">'</span></span>;</pre></div>
+<span class="pl-v">this</span>.<span class="pl-smi">_firstName</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>Panda<span class="pl-pds">'</span></span>;</pre></div>
 </li>
 <li>
 <p><a href="#22.5">22.5</a> (<a href="#27-ecmascript-6-styles"><strong>ES6</strong></a>) <a name="22.5"></a> Don't save references to <code>this</code>. Use arrow functions or Function#bind.</p>
@@ -2233,7 +2327,7 @@ $(<span class="pl-s"><span class="pl-pds">'</span>#items<span class="pl-pds">'</
 <div class="highlight highlight-source-js"><pre><span class="pl-k">class</span> <span class="pl-en">Jedi</span> {
   <span class="pl-en">constructor</span>(<span class="pl-smi">options</span> <span class="pl-k">=</span> {}) {
     <span class="pl-k">const</span> <span class="pl-c1">lightsaber</span> <span class="pl-k">=</span> <span class="pl-smi">options</span>.<span class="pl-smi">lightsaber</span> <span class="pl-k">||</span> <span class="pl-s"><span class="pl-pds">'</span>blue<span class="pl-pds">'</span></span>;
-    <span class="pl-smi">this</span>.<span class="pl-en">set</span>(<span class="pl-s"><span class="pl-pds">'</span>lightsaber<span class="pl-pds">'</span></span>, lightsaber);
+    <span class="pl-v">this</span>.<span class="pl-en">set</span>(<span class="pl-s"><span class="pl-pds">'</span>lightsaber<span class="pl-pds">'</span></span>, lightsaber);
   }
 
   <span class="pl-en">set</span>(<span class="pl-smi">key</span>, <span class="pl-smi">val</span>) {
@@ -2257,22 +2351,22 @@ $(<span class="pl-s"><span class="pl-pds">'</span>#items<span class="pl-pds">'</
 <p><a href="#24.1">24.1</a> <a name="24.1"></a> When attaching data payloads to events (whether DOM events or something more proprietary like Backbone events), pass a hash instead of a raw value. This allows a subsequent contributor to add more data to the event payload without finding and updating every handler for the event. For example, instead of:</p>
 
 <div class="highlight highlight-source-js"><pre><span class="pl-c">// bad</span>
-$(<span class="pl-v">this</span>).<span class="pl-en">trigger</span>(<span class="pl-s"><span class="pl-pds">'</span>listingUpdated<span class="pl-pds">'</span></span>, <span class="pl-smi">listing</span>.<span class="pl-c1">id</span>);
+<span class="pl-en">$</span>(<span class="pl-v">this</span>).<span class="pl-en">trigger</span>(<span class="pl-s"><span class="pl-pds">'</span>listingUpdated<span class="pl-pds">'</span></span>, <span class="pl-smi">listing</span>.<span class="pl-c1">id</span>);
 
 ...
 
-$(<span class="pl-v">this</span>).<span class="pl-en">on</span>(<span class="pl-s"><span class="pl-pds">'</span>listingUpdated<span class="pl-pds">'</span></span>, <span class="pl-k">function</span>(<span class="pl-smi">e</span>, <span class="pl-smi">listingId</span>) {
+<span class="pl-en">$</span>(<span class="pl-v">this</span>).<span class="pl-en">on</span>(<span class="pl-s"><span class="pl-pds">'</span>listingUpdated<span class="pl-pds">'</span></span>, <span class="pl-k">function</span>(<span class="pl-smi">e</span>, <span class="pl-smi">listingId</span>) {
   <span class="pl-c">// do something with listingId</span>
 });</pre></div>
 
 <p>prefer:</p>
 
 <div class="highlight highlight-source-js"><pre><span class="pl-c">// good</span>
-$(<span class="pl-v">this</span>).<span class="pl-en">trigger</span>(<span class="pl-s"><span class="pl-pds">'</span>listingUpdated<span class="pl-pds">'</span></span>, { listingId<span class="pl-k">:</span> <span class="pl-smi">listing</span>.<span class="pl-c1">id</span> });
+<span class="pl-en">$</span>(<span class="pl-v">this</span>).<span class="pl-en">trigger</span>(<span class="pl-s"><span class="pl-pds">'</span>listingUpdated<span class="pl-pds">'</span></span>, { listingId<span class="pl-k">:</span> <span class="pl-smi">listing</span>.<span class="pl-c1">id</span> });
 
 ...
 
-$(<span class="pl-v">this</span>).<span class="pl-en">on</span>(<span class="pl-s"><span class="pl-pds">'</span>listingUpdated<span class="pl-pds">'</span></span>, <span class="pl-k">function</span>(<span class="pl-smi">e</span>, <span class="pl-smi">data</span>) {
+<span class="pl-en">$</span>(<span class="pl-v">this</span>).<span class="pl-en">on</span>(<span class="pl-s"><span class="pl-pds">'</span>listingUpdated<span class="pl-pds">'</span></span>, <span class="pl-k">function</span>(<span class="pl-smi">e</span>, <span class="pl-smi">data</span>) {
   <span class="pl-c">// do something with data.listingId</span>
 });</pre></div>
 
@@ -2288,36 +2382,36 @@ $(<span class="pl-v">this</span>).<span class="pl-en">on</span>(<span class="pl-
 <p><a href="#25.1">25.1</a> <a name="25.1"></a> Prefix jQuery object variables with a <code>$</code>.</p>
 
 <div class="highlight highlight-source-js"><pre><span class="pl-c">// bad</span>
-<span class="pl-k">const</span> <span class="pl-c1">sidebar</span> <span class="pl-k">=</span> $(<span class="pl-s"><span class="pl-pds">'</span>.sidebar<span class="pl-pds">'</span></span>);
+<span class="pl-k">const</span> <span class="pl-c1">sidebar</span> <span class="pl-k">=</span> <span class="pl-en">$</span>(<span class="pl-s"><span class="pl-pds">'</span>.sidebar<span class="pl-pds">'</span></span>);
 
 <span class="pl-c">// good</span>
-<span class="pl-k">const</span> <span class="pl-c1">$sidebar</span> <span class="pl-k">=</span> $(<span class="pl-s"><span class="pl-pds">'</span>.sidebar<span class="pl-pds">'</span></span>);
+<span class="pl-k">const</span> <span class="pl-c1">$sidebar</span> <span class="pl-k">=</span> <span class="pl-en">$</span>(<span class="pl-s"><span class="pl-pds">'</span>.sidebar<span class="pl-pds">'</span></span>);
 
 <span class="pl-c">// good</span>
-<span class="pl-k">const</span> <span class="pl-c1">$sidebarBtn</span> <span class="pl-k">=</span> $(<span class="pl-s"><span class="pl-pds">'</span>.sidebar-btn<span class="pl-pds">'</span></span>);</pre></div>
+<span class="pl-k">const</span> <span class="pl-c1">$sidebarBtn</span> <span class="pl-k">=</span> <span class="pl-en">$</span>(<span class="pl-s"><span class="pl-pds">'</span>.sidebar-btn<span class="pl-pds">'</span></span>);</pre></div>
 </li>
 <li>
 <p><a href="#25.2">25.2</a> <a name="25.2"></a> Cache jQuery lookups.</p>
 
 <div class="highlight highlight-source-js"><pre><span class="pl-c">// bad</span>
 <span class="pl-k">function</span> <span class="pl-en">setSidebar</span>() {
-  $(<span class="pl-s"><span class="pl-pds">'</span>.sidebar<span class="pl-pds">'</span></span>).<span class="pl-en">hide</span>();
+  <span class="pl-en">$</span>(<span class="pl-s"><span class="pl-pds">'</span>.sidebar<span class="pl-pds">'</span></span>).<span class="pl-en">hide</span>();
 
   <span class="pl-c">// ...stuff...</span>
 
-  $(<span class="pl-s"><span class="pl-pds">'</span>.sidebar<span class="pl-pds">'</span></span>).<span class="pl-en">css</span>({
+  <span class="pl-en">$</span>(<span class="pl-s"><span class="pl-pds">'</span>.sidebar<span class="pl-pds">'</span></span>).<span class="pl-en">css</span>({
     <span class="pl-s"><span class="pl-pds">'</span>background-color<span class="pl-pds">'</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>pink<span class="pl-pds">'</span></span>
   });
 }
 
 <span class="pl-c">// good</span>
 <span class="pl-k">function</span> <span class="pl-en">setSidebar</span>() {
-  <span class="pl-k">const</span> <span class="pl-c1">$sidebar</span> <span class="pl-k">=</span> $(<span class="pl-s"><span class="pl-pds">'</span>.sidebar<span class="pl-pds">'</span></span>);
-  $<span class="pl-smi">sidebar</span>.<span class="pl-en">hide</span>();
+  <span class="pl-k">const</span> <span class="pl-c1">$sidebar</span> <span class="pl-k">=</span> <span class="pl-en">$</span>(<span class="pl-s"><span class="pl-pds">'</span>.sidebar<span class="pl-pds">'</span></span>);
+  <span class="pl-smi">$sidebar</span>.<span class="pl-en">hide</span>();
 
   <span class="pl-c">// ...stuff...</span>
 
-  $<span class="pl-smi">sidebar</span>.<span class="pl-en">css</span>({
+  <span class="pl-smi">$sidebar</span>.<span class="pl-en">css</span>({
     <span class="pl-s"><span class="pl-pds">'</span>background-color<span class="pl-pds">'</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>pink<span class="pl-pds">'</span></span>
   });
 }</pre></div>
@@ -2327,19 +2421,19 @@ $(<span class="pl-v">this</span>).<span class="pl-en">on</span>(<span class="pl-
 <p><a href="#25.4">25.4</a> <a name="25.4"></a> Use <code>find</code> with scoped jQuery object queries.</p>
 
 <div class="highlight highlight-source-js"><pre><span class="pl-c">// bad</span>
-$(<span class="pl-s"><span class="pl-pds">'</span>ul<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>.sidebar<span class="pl-pds">'</span></span>).<span class="pl-en">hide</span>();
+<span class="pl-en">$</span>(<span class="pl-s"><span class="pl-pds">'</span>ul<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>.sidebar<span class="pl-pds">'</span></span>).<span class="pl-en">hide</span>();
 
 <span class="pl-c">// bad</span>
-$(<span class="pl-s"><span class="pl-pds">'</span>.sidebar<span class="pl-pds">'</span></span>).<span class="pl-c1">find</span>(<span class="pl-s"><span class="pl-pds">'</span>ul<span class="pl-pds">'</span></span>).<span class="pl-en">hide</span>();
+<span class="pl-en">$</span>(<span class="pl-s"><span class="pl-pds">'</span>.sidebar<span class="pl-pds">'</span></span>).<span class="pl-c1">find</span>(<span class="pl-s"><span class="pl-pds">'</span>ul<span class="pl-pds">'</span></span>).<span class="pl-en">hide</span>();
 
 <span class="pl-c">// good</span>
-$(<span class="pl-s"><span class="pl-pds">'</span>.sidebar ul<span class="pl-pds">'</span></span>).<span class="pl-en">hide</span>();
+<span class="pl-en">$</span>(<span class="pl-s"><span class="pl-pds">'</span>.sidebar ul<span class="pl-pds">'</span></span>).<span class="pl-en">hide</span>();
 
 <span class="pl-c">// good</span>
-$(<span class="pl-s"><span class="pl-pds">'</span>.sidebar &gt; ul<span class="pl-pds">'</span></span>).<span class="pl-en">hide</span>();
+<span class="pl-en">$</span>(<span class="pl-s"><span class="pl-pds">'</span>.sidebar &gt; ul<span class="pl-pds">'</span></span>).<span class="pl-en">hide</span>();
 
 <span class="pl-c">// good</span>
-$<span class="pl-smi">sidebar</span>.<span class="pl-c1">find</span>(<span class="pl-s"><span class="pl-pds">'</span>ul<span class="pl-pds">'</span></span>).<span class="pl-en">hide</span>();</pre></div>
+<span class="pl-smi">$sidebar</span>.<span class="pl-c1">find</span>(<span class="pl-s"><span class="pl-pds">'</span>ul<span class="pl-pds">'</span></span>).<span class="pl-en">hide</span>();</pre></div>
 </li>
 </ul>
 
