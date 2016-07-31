@@ -13,11 +13,12 @@
   6. [Quotes](#6-quotes)
   7. [Spacing](#7-spacing)
   8. [Props](#8-props)
-  9. [Parentheses](#9-parentheses)
-  10. [Tags](#10-tags)
-  11. [Methods](#11-methods)
-  12. [Ordering](#12-ordering)
-  13. [`isMounted`](#13-ismounted)
+  9. [Refs](#9-refs)
+  10. [Parentheses](#10-parentheses)
+  11. [Tags](#11-tags)
+  12. [Methods](#12-methods)
+  13. [Ordering](#13-ordering)
+  14. [`isMounted`](#14-ismounted)
 
 
 ## 1. Basic Rules
@@ -109,6 +110,33 @@
     import Footer from './Footer';
     ```
 
+  - **Higher-order Component Naming**: Use a composite of the higher-order component's name and the passed-in component's name as the `displayName` on the generated component. For example, the higher-order component `withFoo()`, when passed a component `Bar` should produce a component with a `displayName` of `withFoo(Bar)`.
+
+  > Why? A component's `displayName` may be used by developer tools or in error messages, and having a value that clearly expresses this relationship helps people understand what is happening.
+
+    ```jsx
+    // bad
+    export default function withFoo(WrappedComponent) {
+      return function WithFoo(props) {
+        return <WrappedComponent {...props} foo />;
+      }
+    }
+
+    // good
+    export default function withFoo(WrappedComponent) {
+      function WithFoo(props) {
+        return <WrappedComponent {...props} foo />;
+      }
+
+      const wrappedComponentName = WrappedComponent.displayName
+        || WrappedComponent.name
+        || 'Component';
+
+      WithFoo.displayName = `withFoo(${wrappedComponentName})`;
+      return WithFoo;
+    }
+    ```
+
 **[⬆ back to top](#table-of-contents)**
 
 
@@ -165,7 +193,7 @@
 
   - Always use double quotes (`"`) for JSX attributes, but single quotes for all other JS. eslint: [`jsx-quotes`](http://eslint.org/docs/rules/jsx-quotes)
 
-  > Why? JSX attributes [can't contain escaped quotes](http://eslint.org/docs/rules/jsx-quotes), so double quotes make conjunctions like `"don't"` easier to type.
+  > Why? JSX attributes [can't contain escaped quotes](http://eslint.org/docs/rules/jsx-quotes), so double quotes make contractions like `"don't"` easier to type.
   > Regular HTML attributes also typically use double quotes instead of single, so JSX attributes mirror this convention.
 
     ```jsx
@@ -302,10 +330,49 @@
   <div />
   ```
 
+  - Avoid using an array index as `key` prop, prefer a unique ID. ([why?](https://medium.com/@robinpokorny/index-as-a-key-is-an-anti-pattern-e0349aece318))
+
+  ```jsx
+  // bad
+  {todos.map((todo, index) =>
+    <Todo
+      {...todo}
+      key={index}
+    />
+  )}
+
+  // good
+  {todos.map(todo => (
+    <Todo
+      {...todo}
+      key={todo.id}
+    />
+  ))}
+  ```
+
 **[⬆ back to top](#table-of-contents)**
 
 
-## 9. Parentheses
+## 9. Refs
+
+  - Always use ref callbacks. eslint: [`react/no-string-refs`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/no-string-refs.md)
+
+  ```jsx
+  // bad
+  <Foo
+    ref="myRef"
+  />
+
+  // good
+  <Foo
+    ref={(ref) => this.myRef = ref}
+  />
+  ```
+
+**[⬆ back to top](#table-of-contents)**
+
+
+## 10. Parentheses
 
   - Wrap JSX tags in parentheses when they span more than one line. eslint: [`react/wrap-multilines`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/wrap-multilines.md)
 
@@ -336,7 +403,7 @@
 **[⬆ back to top](#table-of-contents)**
 
 
-## 10. Tags
+## 11. Tags
 
   - Always self-close tags that have no children. eslint: [`react/self-closing-comp`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/self-closing-comp.md)
 
@@ -366,7 +433,7 @@
 **[⬆ back to top](#table-of-contents)**
 
 
-## 11. Methods
+## 12. Methods
 
   - Use arrow functions to close over local variables.
 
@@ -458,7 +525,7 @@
 **[⬆ back to top](#table-of-contents)**
 
 
-## 12. Ordering
+## 13. Ordering
 
   - Ordering for `class extends React.Component`:
 
@@ -535,7 +602,7 @@
 **[⬆ back to top](#table-of-contents)**
 
 
-## 13. `isMounted`
+## 14. `isMounted`
 
   - Do not use `isMounted`. eslint: [`react/no-is-mounted`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/no-is-mounted.md)
 

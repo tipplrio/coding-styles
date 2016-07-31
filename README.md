@@ -279,7 +279,7 @@ Other Style Guides
     };
     ```
 
-  - [3.8](#3.8) <a name='3.8'></a> Only quote properties that are invalid identifiers. eslint: [`quote-props`](http://eslint.org/docs/rules/quote-props)
+  - [3.8](#3.8) <a name='3.8'></a> Only quote properties that are invalid identifiers. eslint: [`quote-props`](http://eslint.org/docs/rules/quote-props.html)
 
     > Why? In general we consider it subjectively easier to read. It improves syntax highlighting, and is also more easily optimized by many JS engines.
 
@@ -900,7 +900,13 @@ Other Style Guides
     const itemHeight = (item) => item.height > 256 ? item.largeSize : item.smallSize;
 
     // good
-    const itemHeight = (item) => { return item.height > 256 ? item.largeSize : item.smallSize; };
+    const itemHeight = item => (item.height > 256 ? item.largeSize : item.smallSize);
+
+    // good
+    const itemHeight = (item) => {
+      const { height, largeSize, smallSize } = item;
+      return height > 256 ? largeSize : smallSize;
+    };
     ```
 
 **[⬆ back to top](#table-of-contents)**
@@ -1173,13 +1179,40 @@ Other Style Guides
     export { foo }
     ```
 
-  - ~~[10.6](#10.6) ([**ES5**](#26-ecmascript-5-compatibility)) <a name='10.6'></a>The module should start with a `!`. This ensures that if a malformed module forgets to include a final semicolon there aren't errors in production when the scripts get concatenated. [Explanation](https://github.com/airbnb/javascript/issues/44#issuecomment-13063933)~~
+  - [10.6](#10.7) In modules with a single export, prefer default export over named export. eslint: [`import/prefer-default-export`](https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/prefer-default-export.md)
 
-  - ~~[10.7](#10.7) ([**ES5**](#26-ecmascript-5-compatibility)) <a name='10.7'></a>The file should be named with camelCase, live in a folder with the same name, and match the name of the single export.~~
+    ```javascript
+    // bad
+    export function foo() {}
 
-  - ~~[10.8](#10.8) ([**ES5**](#26-ecmascript-5-compatibility)) <a name='10.8'></a>Add a method called `noConflict()` that sets the exported module to the previous version and returns this one.~~
+    // good
+    export default function foo() {}
+    ```
 
-  - ~~[10.9](#10.9) ([**ES5**](#26-ecmascript-5-compatibility)) <a name='10.9'></a>Always declare `'use strict';` at the top of the module.~~
+  - [10.7](#10.7) Put all `import`s above non-import statements. eslint: [`import/imports-first`](https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/imports-first.md)
+    > Why? Since `import`s are hoisted, keeping them all at the top prevents surprising behavior.
+
+    ```javascript
+    // bad
+    import foo from 'foo';
+    foo.init();
+
+    import bar from 'bar';
+
+    // good
+    import foo from 'foo';
+    import bar from 'bar';
+
+    foo.init();
+    ```
+
+  - ~~[10.8](#10.8) ([**ES5**](#26-ecmascript-5-compatibility)) <a name='10.8'></a>The module should start with a `!`. This ensures that if a malformed module forgets to include a final semicolon there aren't errors in production when the scripts get concatenated. [Explanation](https://github.com/airbnb/javascript/issues/44#issuecomment-13063933)~~
+
+  - ~~[10.9](#10.9) ([**ES5**](#26-ecmascript-5-compatibility)) <a name='10.9'></a>The file should be named with camelCase, live in a folder with the same name, and match the name of the single export.~~
+
+  - ~~[10.10](#10.10) ([**ES5**](#26-ecmascript-5-compatibility)) <a name='10.10'></a>Add a method called `noConflict()` that sets the exported module to the previous version and returns this one.~~
+
+  - ~~[10.11](#10.11) ([**ES5**](#26-ecmascript-5-compatibility)) <a name='10.11'></a>Always declare `'use strict';` at the top of the module.~~
 
     ```javascript
     // fancyInput/fancyInput.js
@@ -1207,34 +1240,80 @@ Other Style Guides
 
 ## 11. Iterators and Generators
 
-- [11.1](#11.1) ([**ES6**](#27-ecmascript-6-styles)) <a name='11.1'></a> Don't use iterators. Prefer JavaScript's higher-order functions like `map()` and `reduce()` instead of loops like `for-of`. eslint: [`no-iterator`](http://eslint.org/docs/rules/no-iterator)
+  - [11.1](#11.1) ([**ES6**](#27-ecmascript-6-styles)) <a name='11.1'></a> Don't use iterators. Prefer JavaScript's higher-order functions instead of loops like `for-in` or `for-of`. eslint: [`no-iterator`](http://eslint.org/docs/rules/no-iterator.html) [`no-restricted-syntax`](http://eslint.org/docs/rules/no-restricted-syntax)
 
-  > Why? This enforces our immutable rule. Dealing with pure functions that return values is easier to reason about than side-effects.
+    > Why? This enforces our immutable rule. Dealing with pure functions that return values is easier to reason about than side-effects.
 
-  ```javascript
-  const numbers = [1, 2, 3, 4, 5];
+    > Use `map()` / `every()` / `filter()` / `find()` / `findIndex()` / `reduce()` / `some()` / ... to iterate over arrays, and `Object.keys()` / `Object.values()` / `Object.entries()` to produce arrays so you can iterate over objects.
 
-  // bad
-  let sum = 0;
-  for (let num of numbers) {
-    sum += num;
-  }
+    ```javascript
+    const numbers = [1, 2, 3, 4, 5];
 
-  sum === 15;
+    // bad
+    let sum = 0;
+    for (let num of numbers) {
+      sum += num;
+    }
 
-  // good
-  let sum = 0;
-  numbers.forEach((num) => sum += num);
-  sum === 15;
+    sum === 15;
 
-  // best (use the functional force)
-  const sum = numbers.reduce((total, num) => total + num, 0);
-  sum === 15;
-  ```
+    // good
+    let sum = 0;
+    numbers.forEach((num) => sum += num);
+    sum === 15;
 
-- [11.2](#11.2) ([**ES6**](#27-ecmascript-6-styles)) <a name='11.2'></a> Don't use generators for now.
+    // best (use the functional force)
+    const sum = numbers.reduce((total, num) => total + num, 0);
+    sum === 15;
+    ```
 
-  > Why? They don't transpile well to ES5.
+  - [11.2](#11.2) ([**ES6**](#27-ecmascript-6-styles)) <a name='11.2'></a> Don't use generators for now.
+
+    > Why? They don't transpile well to ES5.
+
+  - [11.3](#11.3) If you must use generators, or if you disregard [our advice](#11.2), make sure their function signature is spaced properly. eslint: [`generator-star-spacing`](http://eslint.org/docs/rules/generator-star-spacing)
+
+    > Why? `function` and `*` are part of the same conceptual keyword - `*` is not a modifier for `function`, `function*` is a unique construct, different from `function`.
+
+    ```javascript
+    // bad
+    function * foo() {
+    }
+
+    const bar = function * () {
+    }
+
+    const baz = function *() {
+    }
+
+    const quux = function*() {
+    }
+
+    function*foo() {
+    }
+
+    function *foo() {
+    }
+
+    // very bad
+    function
+    *
+    foo() {
+    }
+
+    const wat = function
+    *
+    () {
+    }
+
+    // good
+    function* foo() {
+    }
+
+    const foo = function* () {
+    }
+    ```
+
 
 **[⬆ back to top](#table-of-contents)**
 
@@ -1804,7 +1883,7 @@ Other Style Guides
     function getType() {
       console.log('fetching type...');
       // set the default type to 'no type'
-      const type = this._type || 'no type';
+      const type = this.type || 'no type';
 
       return type;
     }
@@ -1814,7 +1893,7 @@ Other Style Guides
       console.log('fetching type...');
 
       // set the default type to 'no type'
-      const type = this._type || 'no type';
+      const type = this.type || 'no type';
 
       return type;
     }
@@ -1822,7 +1901,7 @@ Other Style Guides
     // also good
     function getType() {
       // set the default type to 'no type'
-      const type = this._type || 'no type';
+      const type = this.type || 'no type';
 
       return type;
     }
@@ -1940,7 +2019,7 @@ Other Style Guides
     const x = y + 5;
     ```
 
-  - [18.5](#18.5) <a name='18.5'></a> End files with a single newline character.
+  - [18.5](#18.5) <a name='18.5'></a> End files with a single newline character. eslint: [`eol-last`](https://github.com/eslint/eslint/blob/master/docs/rules/eol-last.md)
 
     ```javascript
     // bad
@@ -2132,7 +2211,7 @@ Other Style Guides
     console.log(foo[0]);
     ```
 
-  - [18.11](#18.11) <a name='18.11'></a> Add spaces inside curly braces. eslint: [`object-curly-spacing`](http://eslint.org/docs/rules/object-curly-spacing)
+  - [18.11](#18.11) <a name='18.11'></a> Add spaces inside curly braces. eslint: [`object-curly-spacing`](http://eslint.org/docs/rules/object-curly-spacing.html)
 
     ```javascript
     // bad
@@ -2216,7 +2295,7 @@ Other Style Guides
          firstName: 'Florence',
     -    lastName: 'Nightingale'
     +    lastName: 'Nightingale',
-    +    inventorOf: ['coxcomb graph', 'modern nursing']
+    +    inventorOf: ['coxcomb chart', 'modern nursing']
     };
 
     // good - git diff with trailing comma
@@ -2454,7 +2533,7 @@ Other Style Guides
     this.firstName = 'Panda';
     ```
 
-  - [22.5](#22.5) ([**ES6**](#27-ecmascript-6-styles)) <a name='22.5'></a> Don't save references to `this`. Use arrow functions or Function#bind.
+  - [22.5](#22.5) ([**ES6**](#27-ecmascript-6-styles)) <a name='22.5'></a> Don't save references to `this`. Use arrow functions or [Function#bind](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind).
 
     ```javascript
     // bad
@@ -2500,12 +2579,19 @@ Other Style Guides
       };
     }
 
-    // good
+    // bad
     function() {
       var _this = this;
       return function() {
         console.log(_this);
       };
+    }
+
+    // good
+    function () {
+      return function () {
+        console.log(this);
+      }.bind(this);
     }
     ```
 
@@ -2591,16 +2677,26 @@ Other Style Guides
 
     ```javascript
     // bad
-    dragon.age();
+    class Dragon {
+      get age() {
+        // ...
+      }
+
+      set age(value) {
+        // ...
+      }
+    }
 
     // good
-    dragon.getAge();
+    class Dragon {
+      getAge() {
+        // ...
+      }
 
-    // bad
-    dragon.age(25);
-
-    // good
-    dragon.setAge(25);
+      setAge(value) {
+        // ...
+      }
+    }
     ```
 
   - [23.3](#23.3) <a name='23.3'></a> If the property is a `boolean`, use `isVal()` or `hasVal()`.
@@ -2840,7 +2936,7 @@ Other Style Guides
 
 **Other Style Guides**
 
-  - [Google JavaScript Style Guide](http://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml)
+  - [Google JavaScript Style Guide](https://google.github.io/styleguide/javascriptguide.xml)
   - [jQuery Core Style Guidelines](http://contribute.jquery.org/style-guide/js/)
   - [Principles of Writing Consistent, Idiomatic JavaScript](https://github.com/rwaldron/idiomatic.js)
 
