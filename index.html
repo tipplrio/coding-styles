@@ -315,7 +315,7 @@ obj[<span class="pl-en">getKey</span>(<span class="pl-s"><span class="pl-pds">'<
 };</pre></div>
 </li>
 <li>
-<p><a href="#3.8">3.8</a> <a name="3.8"></a> Only quote properties that are invalid identifiers. eslint: <a href="http://eslint.org/docs/rules/quote-props"><code>quote-props</code></a></p>
+<p><a href="#3.8">3.8</a> <a name="3.8"></a> Only quote properties that are invalid identifiers. eslint: <a href="http://eslint.org/docs/rules/quote-props.html"><code>quote-props</code></a></p>
 
 <blockquote>
 <p>Why? In general we consider it subjectively easier to read. It improves syntax highlighting, and is also more easily optimized by many JS engines.</p>
@@ -944,7 +944,13 @@ itemsCopy <span class="pl-k">=</span> <span class="pl-smi">items</span>.<span cl
 <span class="pl-k">const</span> <span class="pl-c1">itemHeight</span> <span class="pl-k">=</span> (<span class="pl-smi">item</span>) <span class="pl-k">=&gt;</span> <span class="pl-smi">item</span>.<span class="pl-c1">height</span> <span class="pl-k">&gt;</span> <span class="pl-c1">256</span> <span class="pl-k">?</span> <span class="pl-smi">item</span>.<span class="pl-smi">largeSize</span> <span class="pl-k">:</span> <span class="pl-smi">item</span>.<span class="pl-smi">smallSize</span>;
 
 <span class="pl-c">// good</span>
-<span class="pl-k">const</span> <span class="pl-c1">itemHeight</span> <span class="pl-k">=</span> (<span class="pl-smi">item</span>) <span class="pl-k">=&gt;</span> { <span class="pl-k">return</span> <span class="pl-smi">item</span>.<span class="pl-c1">height</span> <span class="pl-k">&gt;</span> <span class="pl-c1">256</span> <span class="pl-k">?</span> <span class="pl-smi">item</span>.<span class="pl-smi">largeSize</span> <span class="pl-k">:</span> <span class="pl-smi">item</span>.<span class="pl-smi">smallSize</span>; };</pre></div>
+<span class="pl-k">const</span> <span class="pl-c1">itemHeight</span> <span class="pl-k">=</span> <span class="pl-smi">item</span> <span class="pl-k">=&gt;</span> (<span class="pl-smi">item</span>.<span class="pl-c1">height</span> <span class="pl-k">&gt;</span> <span class="pl-c1">256</span> <span class="pl-k">?</span> <span class="pl-smi">item</span>.<span class="pl-smi">largeSize</span> <span class="pl-k">:</span> <span class="pl-smi">item</span>.<span class="pl-smi">smallSize</span>);
+
+<span class="pl-c">// good</span>
+<span class="pl-k">const</span> <span class="pl-c1">itemHeight</span> <span class="pl-k">=</span> (<span class="pl-smi">item</span>) <span class="pl-k">=&gt;</span> {
+  <span class="pl-k">const</span> { <span class="pl-c1">height</span>, <span class="pl-c1">largeSize</span>, <span class="pl-c1">smallSize</span> } <span class="pl-k">=</span> item;
+  <span class="pl-k">return</span> height <span class="pl-k">&gt;</span> <span class="pl-c1">256</span> <span class="pl-k">?</span> largeSize <span class="pl-k">:</span> smallSize;
+};</pre></div>
 </li>
 </ul>
 
@@ -1225,11 +1231,39 @@ itemsCopy <span class="pl-k">=</span> <span class="pl-smi">items</span>.<span cl
 <span class="pl-k">const</span> <span class="pl-c1">foo</span> <span class="pl-k">=</span> <span class="pl-c1">3</span>;
 <span class="pl-k">export</span> { <span class="pl-smi">foo</span> }</pre></div>
 </li>
-<li><p><del><a href="#10.6">10.6</a> (<a href="#26-ecmascript-5-compatibility"><strong>ES5</strong></a>) <a name="10.6"></a>The module should start with a <code>!</code>. This ensures that if a malformed module forgets to include a final semicolon there aren't errors in production when the scripts get concatenated. <a href="https://github.com/airbnb/javascript/issues/44#issuecomment-13063933">Explanation</a></del></p></li>
-<li><p><del><a href="#10.7">10.7</a> (<a href="#26-ecmascript-5-compatibility"><strong>ES5</strong></a>) <a name="10.7"></a>The file should be named with camelCase, live in a folder with the same name, and match the name of the single export.</del></p></li>
-<li><p><del><a href="#10.8">10.8</a> (<a href="#26-ecmascript-5-compatibility"><strong>ES5</strong></a>) <a name="10.8"></a>Add a method called <code>noConflict()</code> that sets the exported module to the previous version and returns this one.</del></p></li>
 <li>
-<p><del><a href="#10.9">10.9</a> (<a href="#26-ecmascript-5-compatibility"><strong>ES5</strong></a>) <a name="10.9"></a>Always declare <code>'use strict';</code> at the top of the module.</del></p>
+<p><a href="#10.7">10.6</a> In modules with a single export, prefer default export over named export. eslint: <a href="https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/prefer-default-export.md"><code>import/prefer-default-export</code></a></p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-c">// bad</span>
+<span class="pl-k">export</span> <span class="pl-k">function</span> <span class="pl-en">foo</span>() {}
+
+<span class="pl-c">// good</span>
+<span class="pl-k">export</span> <span class="pl-v">default</span> <span class="pl-k">function</span> <span class="pl-en">foo</span>() {}</pre></div>
+</li>
+<li>
+<p><a href="#10.7">10.7</a> Put all <code>import</code>s above non-import statements. eslint: <a href="https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/imports-first.md"><code>import/imports-first</code></a></p>
+
+<blockquote>
+<p>Why? Since <code>import</code>s are hoisted, keeping them all at the top prevents surprising behavior.</p>
+</blockquote>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-c">// bad</span>
+<span class="pl-k">import</span> <span class="pl-smi">foo</span> <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>foo<span class="pl-pds">'</span></span>;
+<span class="pl-smi">foo</span>.<span class="pl-en">init</span>();
+
+<span class="pl-k">import</span> <span class="pl-smi">bar</span> <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>bar<span class="pl-pds">'</span></span>;
+
+<span class="pl-c">// good</span>
+<span class="pl-k">import</span> <span class="pl-smi">foo</span> <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>foo<span class="pl-pds">'</span></span>;
+<span class="pl-k">import</span> <span class="pl-smi">bar</span> <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>bar<span class="pl-pds">'</span></span>;
+
+<span class="pl-smi">foo</span>.<span class="pl-en">init</span>();</pre></div>
+</li>
+<li><p><del><a href="#10.8">10.8</a> (<a href="#26-ecmascript-5-compatibility"><strong>ES5</strong></a>) <a name="10.8"></a>The module should start with a <code>!</code>. This ensures that if a malformed module forgets to include a final semicolon there aren't errors in production when the scripts get concatenated. <a href="https://github.com/airbnb/javascript/issues/44#issuecomment-13063933">Explanation</a></del></p></li>
+<li><p><del><a href="#10.9">10.9</a> (<a href="#26-ecmascript-5-compatibility"><strong>ES5</strong></a>) <a name="10.9"></a>The file should be named with camelCase, live in a folder with the same name, and match the name of the single export.</del></p></li>
+<li><p><del><a href="#10.10">10.10</a> (<a href="#26-ecmascript-5-compatibility"><strong>ES5</strong></a>) <a name="10.10"></a>Add a method called <code>noConflict()</code> that sets the exported module to the previous version and returns this one.</del></p></li>
+<li>
+<p><del><a href="#10.11">10.11</a> (<a href="#26-ecmascript-5-compatibility"><strong>ES5</strong></a>) <a name="10.11"></a>Always declare <code>'use strict';</code> at the top of the module.</del></p>
 
 <div class="highlight highlight-source-js"><pre><span class="pl-c">// fancyInput/fancyInput.js</span>
 
@@ -1259,10 +1293,12 @@ itemsCopy <span class="pl-k">=</span> <span class="pl-smi">items</span>.<span cl
 
 <ul>
 <li>
-<p><a href="#11.1">11.1</a> (<a href="#27-ecmascript-6-styles"><strong>ES6</strong></a>) <a name="11.1"></a> Don't use iterators. Prefer JavaScript's higher-order functions like <code>map()</code> and <code>reduce()</code> instead of loops like <code>for-of</code>. eslint: <a href="http://eslint.org/docs/rules/no-iterator"><code>no-iterator</code></a></p>
+<p><a href="#11.1">11.1</a> (<a href="#27-ecmascript-6-styles"><strong>ES6</strong></a>) <a name="11.1"></a> Don't use iterators. Prefer JavaScript's higher-order functions instead of loops like <code>for-in</code> or <code>for-of</code>. eslint: <a href="http://eslint.org/docs/rules/no-iterator.html"><code>no-iterator</code></a> <a href="http://eslint.org/docs/rules/no-restricted-syntax"><code>no-restricted-syntax</code></a></p>
 
 <blockquote>
 <p>Why? This enforces our immutable rule. Dealing with pure functions that return values is easier to reason about than side-effects.</p>
+
+<p>Use <code>map()</code> / <code>every()</code> / <code>filter()</code> / <code>find()</code> / <code>findIndex()</code> / <code>reduce()</code> / <code>some()</code> / ... to iterate over arrays, and <code>Object.keys()</code> / <code>Object.values()</code> / <code>Object.entries()</code> to produce arrays so you can iterate over objects.</p>
 </blockquote>
 
 <div class="highlight highlight-source-js"><pre><span class="pl-k">const</span> <span class="pl-c1">numbers</span> <span class="pl-k">=</span> [<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>, <span class="pl-c1">4</span>, <span class="pl-c1">5</span>];
@@ -1290,6 +1326,50 @@ sum <span class="pl-k">===</span> <span class="pl-c1">15</span>;</pre></div>
 <blockquote>
 <p>Why? They don't transpile well to ES5.</p>
 </blockquote>
+</li>
+<li>
+<p><a href="#11.3">11.3</a> If you must use generators, or if you disregard <a href="#11.2">our advice</a>, make sure their function signature is spaced properly. eslint: <a href="http://eslint.org/docs/rules/generator-star-spacing"><code>generator-star-spacing</code></a></p>
+
+<blockquote>
+<p>Why? <code>function</code> and <code>*</code> are part of the same conceptual keyword - <code>*</code> is not a modifier for <code>function</code>, <code>function*</code> is a unique construct, different from <code>function</code>.</p>
+</blockquote>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-c">// bad</span>
+<span class="pl-k">function</span> <span class="pl-k">*</span> <span class="pl-en">foo</span>() {
+}
+
+<span class="pl-k">const</span> <span class="pl-c1">bar</span> <span class="pl-k">=</span> <span class="pl-k">function</span> <span class="pl-k">*</span> () {
+}
+
+<span class="pl-k">const</span> <span class="pl-c1">baz</span> <span class="pl-k">=</span> <span class="pl-k">function</span> <span class="pl-k">*</span>() {
+}
+
+<span class="pl-k">const</span> <span class="pl-c1">quux</span> <span class="pl-k">=</span> <span class="pl-k">function</span><span class="pl-k">*</span>() {
+}
+
+<span class="pl-k">function</span><span class="pl-k">*</span><span class="pl-en">foo</span>() {
+}
+
+<span class="pl-k">function</span> <span class="pl-k">*</span><span class="pl-en">foo</span>() {
+}
+
+<span class="pl-c">// very bad</span>
+<span class="pl-k">function</span>
+*
+<span class="pl-en">foo</span>() {
+}
+
+<span class="pl-k">const</span> <span class="pl-c1">wat</span> <span class="pl-k">=</span> <span class="pl-k">function</span>
+*
+() {
+}
+
+<span class="pl-c">// good</span>
+<span class="pl-k">function</span><span class="pl-k">*</span> <span class="pl-en">foo</span>() {
+}
+
+<span class="pl-k">const</span> <span class="pl-c1">foo</span> <span class="pl-k">=</span> <span class="pl-k">function</span><span class="pl-k">*</span> () {
+}</pre></div>
 </li>
 </ul>
 
@@ -1874,7 +1954,7 @@ superPower <span class="pl-k">=</span> <span class="pl-k">new</span> <span class
 <span class="pl-k">function</span> <span class="pl-en">getType</span>() {
   <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-s"><span class="pl-pds">'</span>fetching type...<span class="pl-pds">'</span></span>);
   <span class="pl-c">// set the default type to 'no type'</span>
-  <span class="pl-k">const</span> <span class="pl-c1">type</span> <span class="pl-k">=</span> <span class="pl-v">this</span>.<span class="pl-smi">_type</span> <span class="pl-k">||</span> <span class="pl-s"><span class="pl-pds">'</span>no type<span class="pl-pds">'</span></span>;
+  <span class="pl-k">const</span> <span class="pl-c1">type</span> <span class="pl-k">=</span> <span class="pl-v">this</span>.<span class="pl-c1">type</span> <span class="pl-k">||</span> <span class="pl-s"><span class="pl-pds">'</span>no type<span class="pl-pds">'</span></span>;
 
   <span class="pl-k">return</span> type;
 }
@@ -1884,7 +1964,7 @@ superPower <span class="pl-k">=</span> <span class="pl-k">new</span> <span class
   <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-s"><span class="pl-pds">'</span>fetching type...<span class="pl-pds">'</span></span>);
 
   <span class="pl-c">// set the default type to 'no type'</span>
-  <span class="pl-k">const</span> <span class="pl-c1">type</span> <span class="pl-k">=</span> <span class="pl-v">this</span>.<span class="pl-smi">_type</span> <span class="pl-k">||</span> <span class="pl-s"><span class="pl-pds">'</span>no type<span class="pl-pds">'</span></span>;
+  <span class="pl-k">const</span> <span class="pl-c1">type</span> <span class="pl-k">=</span> <span class="pl-v">this</span>.<span class="pl-c1">type</span> <span class="pl-k">||</span> <span class="pl-s"><span class="pl-pds">'</span>no type<span class="pl-pds">'</span></span>;
 
   <span class="pl-k">return</span> type;
 }
@@ -1892,7 +1972,7 @@ superPower <span class="pl-k">=</span> <span class="pl-k">new</span> <span class
 <span class="pl-c">// also good</span>
 <span class="pl-k">function</span> <span class="pl-en">getType</span>() {
   <span class="pl-c">// set the default type to 'no type'</span>
-  <span class="pl-k">const</span> <span class="pl-c1">type</span> <span class="pl-k">=</span> <span class="pl-v">this</span>.<span class="pl-smi">_type</span> <span class="pl-k">||</span> <span class="pl-s"><span class="pl-pds">'</span>no type<span class="pl-pds">'</span></span>;
+  <span class="pl-k">const</span> <span class="pl-c1">type</span> <span class="pl-k">=</span> <span class="pl-v">this</span>.<span class="pl-c1">type</span> <span class="pl-k">||</span> <span class="pl-s"><span class="pl-pds">'</span>no type<span class="pl-pds">'</span></span>;
 
   <span class="pl-k">return</span> type;
 }</pre></div>
@@ -2006,7 +2086,7 @@ superPower <span class="pl-k">=</span> <span class="pl-k">new</span> <span class
 <span class="pl-k">const</span> <span class="pl-c1">x</span> <span class="pl-k">=</span> y <span class="pl-k">+</span> <span class="pl-c1">5</span>;</pre></div>
 </li>
 <li>
-<p><a href="#18.5">18.5</a> <a name="18.5"></a> End files with a single newline character.</p>
+<p><a href="#18.5">18.5</a> <a name="18.5"></a> End files with a single newline character. eslint: <a href="https://github.com/eslint/eslint/blob/master/docs/rules/eol-last.md"><code>eol-last</code></a></p>
 
 <div class="highlight highlight-source-js"><pre><span class="pl-c">// bad</span>
 (<span class="pl-k">function</span>(<span class="pl-c1">global</span>) {
@@ -2188,7 +2268,7 @@ emphasizes that the line is a method call, not a new statement. eslint: <a href=
 <span class="pl-en">console</span>.<span class="pl-c1">log</span>(foo[<span class="pl-c1">0</span>]);</pre></div>
 </li>
 <li>
-<p><a href="#18.11">18.11</a> <a name="18.11"></a> Add spaces inside curly braces. eslint: <a href="http://eslint.org/docs/rules/object-curly-spacing"><code>object-curly-spacing</code></a></p>
+<p><a href="#18.11">18.11</a> <a name="18.11"></a> Add spaces inside curly braces. eslint: <a href="http://eslint.org/docs/rules/object-curly-spacing.html"><code>object-curly-spacing</code></a></p>
 
 <div class="highlight highlight-source-js"><pre><span class="pl-c">// bad</span>
 <span class="pl-k">const</span> <span class="pl-c1">foo</span> <span class="pl-k">=</span> {clark<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>kent<span class="pl-pds">'</span></span>};
@@ -2275,7 +2355,7 @@ emphasizes that the line is a method call, not a new statement. eslint: <a href=
      firstName<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Florence<span class="pl-pds">'</span></span>,
 <span class="pl-k">-</span>    lastName<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Nightingale<span class="pl-pds">'</span></span>
 <span class="pl-k">+</span>    lastName<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Nightingale<span class="pl-pds">'</span></span>,
-<span class="pl-k">+</span>    inventorOf<span class="pl-k">:</span> [<span class="pl-s"><span class="pl-pds">'</span>coxcomb graph<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>modern nursing<span class="pl-pds">'</span></span>]
+<span class="pl-k">+</span>    inventorOf<span class="pl-k">:</span> [<span class="pl-s"><span class="pl-pds">'</span>coxcomb chart<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>modern nursing<span class="pl-pds">'</span></span>]
 };
 
 <span class="pl-c">// good - git diff with trailing comma</span>
@@ -2513,7 +2593,7 @@ emphasizes that the line is a method call, not a new statement. eslint: <a href=
 <span class="pl-v">this</span>.<span class="pl-smi">firstName</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>Panda<span class="pl-pds">'</span></span>;</pre></div>
 </li>
 <li>
-<p><a href="#22.5">22.5</a> (<a href="#27-ecmascript-6-styles"><strong>ES6</strong></a>) <a name="22.5"></a> Don't save references to <code>this</code>. Use arrow functions or Function#bind.</p>
+<p><a href="#22.5">22.5</a> (<a href="#27-ecmascript-6-styles"><strong>ES6</strong></a>) <a name="22.5"></a> Don't save references to <code>this</code>. Use arrow functions or <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind">Function#bind</a>.</p>
 
 <div class="highlight highlight-source-js"><pre><span class="pl-c">// bad</span>
 <span class="pl-k">function</span> <span class="pl-en">foo</span>() {
@@ -2556,12 +2636,19 @@ emphasizes that the line is a method call, not a new statement. eslint: <a href=
   };
 }
 
-<span class="pl-c">// good</span>
+<span class="pl-c">// bad</span>
 <span class="pl-k">function</span>() {
   <span class="pl-k">var</span> _this <span class="pl-k">=</span> <span class="pl-v">this</span>;
   <span class="pl-k">return</span> <span class="pl-k">function</span>() {
     <span class="pl-en">console</span>.<span class="pl-c1">log</span>(_this);
   };
+}
+
+<span class="pl-c">// good</span>
+<span class="pl-k">function</span> () {
+  <span class="pl-k">return</span> <span class="pl-k">function</span> () {
+    <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-v">this</span>);
+  }.<span class="pl-en">bind</span>(<span class="pl-v">this</span>);
 }</pre></div>
 </li>
 <li>
@@ -2644,16 +2731,26 @@ emphasizes that the line is a method call, not a new statement. eslint: <a href=
 <p><a href="#23.2">23.2</a> <a name="23.2"></a> Do not use JavaScript getters/setters as they cause unexpected side effects and are harder to test, maintain, and reason about. Instead, if you do make accessor functions, use getVal() and setVal('hello').</p>
 
 <div class="highlight highlight-source-js"><pre><span class="pl-c">// bad</span>
-<span class="pl-smi">dragon</span>.<span class="pl-en">age</span>();
+<span class="pl-k">class</span> <span class="pl-en">Dragon</span> {
+  get <span class="pl-en">age</span>() {
+    <span class="pl-c">// ...</span>
+  }
+
+  set <span class="pl-en">age</span>(<span class="pl-smi">value</span>) {
+    <span class="pl-c">// ...</span>
+  }
+}
 
 <span class="pl-c">// good</span>
-<span class="pl-smi">dragon</span>.<span class="pl-en">getAge</span>();
+<span class="pl-k">class</span> <span class="pl-en">Dragon</span> {
+  <span class="pl-en">getAge</span>() {
+    <span class="pl-c">// ...</span>
+  }
 
-<span class="pl-c">// bad</span>
-<span class="pl-smi">dragon</span>.<span class="pl-en">age</span>(<span class="pl-c1">25</span>);
-
-<span class="pl-c">// good</span>
-<span class="pl-smi">dragon</span>.<span class="pl-en">setAge</span>(<span class="pl-c1">25</span>);</pre></div>
+  <span class="pl-en">setAge</span>(<span class="pl-smi">value</span>) {
+    <span class="pl-c">// ...</span>
+  }
+}</pre></div>
 </li>
 <li>
 <p><a href="#23.3">23.3</a> <a name="23.3"></a> If the property is a <code>boolean</code>, use <code>isVal()</code> or <code>hasVal()</code>.</p>
@@ -2923,7 +3020,7 @@ emphasizes that the line is a method call, not a new statement. eslint: <a href=
 <p><strong>Other Style Guides</strong></p>
 
 <ul>
-<li><a href="http://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml">Google JavaScript Style Guide</a></li>
+<li><a href="https://google.github.io/styleguide/javascriptguide.xml">Google JavaScript Style Guide</a></li>
 <li><a href="http://contribute.jquery.org/style-guide/js/">jQuery Core Style Guidelines</a></li>
 <li><a href="https://github.com/rwaldron/idiomatic.js">Principles of Writing Consistent, Idiomatic JavaScript</a></li>
 </ul>
