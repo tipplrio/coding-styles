@@ -36,11 +36,12 @@
 <li><a href="#6-quotes">Quotes</a></li>
 <li><a href="#7-spacing">Spacing</a></li>
 <li><a href="#8-props">Props</a></li>
-<li><a href="#9-parentheses">Parentheses</a></li>
-<li><a href="#10-tags">Tags</a></li>
-<li><a href="#11-methods">Methods</a></li>
-<li><a href="#12-ordering">Ordering</a></li>
-<li><a href="#13-ismounted"><code>isMounted</code></a></li>
+<li><a href="#9-refs">Refs</a></li>
+<li><a href="#10-parentheses">Parentheses</a></li>
+<li><a href="#11-tags">Tags</a></li>
+<li><a href="#12-methods">Methods</a></li>
+<li><a href="#13-ordering">Ordering</a></li>
+<li><a href="#14-ismounted"><code>isMounted</code></a></li>
 </ol>
 
 <h2>
@@ -67,7 +68,7 @@
 <p>If you have internal state and/or refs, prefer <code>class extends React.Component</code> over <code>React.createClass</code> unless you have a very good reason to use mixins. eslint: <a href="https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/prefer-es6-class.md"><code>react/prefer-es6-class</code></a> <a href="https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/prefer-stateless-function.md"><code>react/prefer-stateless-function</code></a></p>
 
 <div class="highlight highlight-source-js-jsx"><pre><span class="pl-c">// bad</span>
-<span class="pl-k">const</span><span class="pl-smi"> Listing</span><span class="pl-k"> =</span> <span class="pl-smi">React</span><span class="pl-k">.</span><span class="pl-en">createClass</span>({
+<span class="pl-k">const</span> <span class="pl-smi">Listing</span><span class="pl-k"> =</span> <span class="pl-smi">React</span><span class="pl-k">.</span><span class="pl-en">createClass</span>({
 <span class="pl-c">  // ...</span>
   <span class="pl-en">render</span>() {
 <span class="pl-k">    return</span> &lt;<span class="pl-ent">div</span>&gt;<span class="pl-pse">{</span><span class="pl-s1"><span class="pl-v">this</span><span class="pl-k">.</span><span class="pl-smi">state</span><span class="pl-k">.</span><span class="pl-smi">hello</span></span><span class="pl-pse">}</span>&lt;/<span class="pl-ent">div</span>&gt;;
@@ -92,7 +93,7 @@
 }
 
 <span class="pl-c">// bad (relying on function name inference is discouraged)</span>
-<span class="pl-k">const</span> <span class="pl-en">Listing</span> <span class="pl-k">=</span> ({<span class="pl-smi"> hello</span> }) <span class="pl-k">=&gt;</span> (
+<span class="pl-k">const</span> <span class="pl-smi">Listing</span><span class="pl-k"> =</span> ({<span class="pl-smi"> hello</span> }) <span class="pl-k">=&gt;</span> (
   &lt;<span class="pl-ent">div</span>&gt;<span class="pl-pse">{</span><span class="pl-s1"><span class="pl-smi">hello</span></span><span class="pl-pse">}</span>&lt;/<span class="pl-ent">div</span>&gt;
 );
 
@@ -123,10 +124,10 @@
 <span class="pl-k">import</span><span class="pl-smi"> ReservationCard</span><span class="pl-k"> from</span> <span class="pl-s"><span class="pl-pds">'</span>./ReservationCard<span class="pl-pds">'</span></span>;
 
 <span class="pl-c">// bad</span>
-<span class="pl-k">const</span><span class="pl-smi"> ReservationItem</span><span class="pl-k"> =</span> &lt;<span class="pl-ent"><span class="pl-c1">ReservationCard</span></span> /&gt;;
+<span class="pl-k">const</span> <span class="pl-smi">ReservationItem</span><span class="pl-k"> =</span> &lt;<span class="pl-ent"><span class="pl-c1">ReservationCard</span></span> /&gt;;
 
 <span class="pl-c">// good</span>
-<span class="pl-k">const</span><span class="pl-smi"> reservationItem</span><span class="pl-k"> =</span> &lt;<span class="pl-ent"><span class="pl-c1">ReservationCard</span></span> /&gt;;</pre></div>
+<span class="pl-k">const</span> <span class="pl-smi">reservationItem</span><span class="pl-k"> =</span> &lt;<span class="pl-ent"><span class="pl-c1">ReservationCard</span></span> /&gt;;</pre></div>
 </li>
 <li>
 <p><strong>Component Naming</strong>: Use the filename as the component name. For example, <code>ReservationCard.jsx</code> should have a reference name of <code>ReservationCard</code>. However, for root components of a directory, use <code>index.jsx</code> as the filename and use the directory name as the component name:</p>
@@ -139,6 +140,34 @@
 
 <span class="pl-c">// good</span>
 <span class="pl-k">import</span><span class="pl-smi"> Footer</span><span class="pl-k"> from</span> <span class="pl-s"><span class="pl-pds">'</span>./Footer<span class="pl-pds">'</span></span>;</pre></div>
+</li>
+<li>
+<p><strong>Higher-order Component Naming</strong>: Use a composite of the higher-order component's name and the passed-in component's name as the <code>displayName</code> on the generated component. For example, the higher-order component <code>withFoo()</code>, when passed a component <code>Bar</code> should produce a component with a <code>displayName</code> of <code>withFoo(Bar)</code>.</p>
+
+<blockquote>
+<p>Why? A component's <code>displayName</code> may be used by developer tools or in error messages, and having a value that clearly expresses this relationship helps people understand what is happening.</p>
+</blockquote>
+
+<div class="highlight highlight-source-js-jsx"><pre><span class="pl-c">  // bad</span>
+<span class="pl-k">  export default</span> <span class="pl-k">function</span> <span class="pl-en">withFoo</span>(<span class="pl-smi">WrappedComponent</span>) {
+<span class="pl-k">    return</span> <span class="pl-k">function</span> <span class="pl-en">WithFoo</span>(<span class="pl-smi">props</span>) {
+<span class="pl-k">      return</span> &lt;<span class="pl-ent"><span class="pl-c1">WrappedComponent</span></span> <span class="pl-pse">{</span><span class="pl-s1"><span class="pl-k">...</span><span class="pl-smi">props</span></span><span class="pl-pse">}</span> <span class="pl-e">foo</span> /&gt;;
+    }
+  }
+
+<span class="pl-c">  // good</span>
+<span class="pl-k">  export default</span> <span class="pl-k">function</span> <span class="pl-en">withFoo</span>(<span class="pl-smi">WrappedComponent</span>) {
+    <span class="pl-k">function</span> <span class="pl-en">WithFoo</span>(<span class="pl-smi">props</span>) {
+<span class="pl-k">      return</span> &lt;<span class="pl-ent"><span class="pl-c1">WrappedComponent</span></span> <span class="pl-pse">{</span><span class="pl-s1"><span class="pl-k">...</span><span class="pl-smi">props</span></span><span class="pl-pse">}</span> <span class="pl-e">foo</span> /&gt;;
+    }
+
+    <span class="pl-k">const</span> <span class="pl-smi">wrappedComponentName</span><span class="pl-k"> =</span> <span class="pl-smi">WrappedComponent</span><span class="pl-k">.</span><span class="pl-smi">displayName</span>
+<span class="pl-k">      ||</span> <span class="pl-smi">WrappedComponent</span><span class="pl-k">.</span><span class="pl-smi">name</span>
+<span class="pl-k">      ||</span> <span class="pl-s"><span class="pl-pds">'</span>Component<span class="pl-pds">'</span></span>;
+
+    <span class="pl-smi">WithFoo</span><span class="pl-k">.</span><span class="pl-smi">displayName</span><span class="pl-k"> =</span><span class="pl-s"> <span class="pl-s">`</span><span class="pl-s">withFoo(<span class="pl-e">${<span class="pl-smi">wrappedComponentName</span>}</span>)</span><span class="pl-s">`</span></span>;
+<span class="pl-k">    return</span><span class="pl-smi"> WithFoo</span>;
+  }</pre></div>
 </li>
 </ul>
 
@@ -205,7 +234,7 @@
 <p>Always use double quotes (<code>"</code>) for JSX attributes, but single quotes for all other JS. eslint: <a href="http://eslint.org/docs/rules/jsx-quotes"><code>jsx-quotes</code></a></p>
 
 <blockquote>
-<p>Why? JSX attributes <a href="http://eslint.org/docs/rules/jsx-quotes">can't contain escaped quotes</a>, so double quotes make conjunctions like <code>"don't"</code> easier to type.
+<p>Why? JSX attributes <a href="http://eslint.org/docs/rules/jsx-quotes">can't contain escaped quotes</a>, so double quotes make contractions like <code>"don't"</code> easier to type.
 Regular HTML attributes also typically use double quotes instead of single, so JSX attributes mirror this convention.</p>
 </blockquote>
 
@@ -343,12 +372,52 @@ Regular HTML attributes also typically use double quotes instead of single, so J
 <span class="pl-c">// good</span>
 &lt;<span class="pl-ent">div</span> /&gt;</pre></div>
 </li>
+<li>
+<p>Avoid using an array index as <code>key</code> prop, prefer a unique ID. (<a href="https://medium.com/@robinpokorny/index-as-a-key-is-an-anti-pattern-e0349aece318">why?</a>)</p>
+
+<div class="highlight highlight-source-js-jsx"><pre><span class="pl-c">// bad</span>
+{<span class="pl-smi">todos</span><span class="pl-k">.</span><span class="pl-en">map</span>((<span class="pl-smi">todo</span>,<span class="pl-smi"> index</span>) <span class="pl-k">=&gt;</span>
+  &lt;<span class="pl-ent"><span class="pl-c1">Todo</span></span>
+    <span class="pl-pse">{</span><span class="pl-s1"><span class="pl-k">...</span><span class="pl-smi">todo</span></span><span class="pl-pse">}</span>
+    <span class="pl-e">key</span><span class="pl-k">=</span><span class="pl-pse">{</span><span class="pl-s1"><span class="pl-smi">index</span></span><span class="pl-pse">}</span>
+  /&gt;
+)}
+
+<span class="pl-c">// good</span>
+{<span class="pl-smi">todos</span><span class="pl-k">.</span><span class="pl-en">map</span>(<span class="pl-smi">todo</span> <span class="pl-k">=&gt;</span> (
+  &lt;<span class="pl-ent"><span class="pl-c1">Todo</span></span>
+    <span class="pl-pse">{</span><span class="pl-s1"><span class="pl-k">...</span><span class="pl-smi">todo</span></span><span class="pl-pse">}</span>
+    <span class="pl-e">key</span><span class="pl-k">=</span><span class="pl-pse">{</span><span class="pl-s1"><span class="pl-smi">todo</span><span class="pl-k">.</span><span class="pl-smi">id</span></span><span class="pl-pse">}</span>
+  /&gt;
+))}</pre></div>
+</li>
 </ul>
 
 <p><strong><a href="#table-of-contents">⬆ back to top</a></strong></p>
 
 <h2>
-<a id="9-parentheses" class="anchor" href="#9-parentheses" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>9. Parentheses</h2>
+<a id="9-refs" class="anchor" href="#9-refs" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>9. Refs</h2>
+
+<ul>
+<li>
+<p>Always use ref callbacks. eslint: <a href="https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/no-string-refs.md"><code>react/no-string-refs</code></a></p>
+
+<div class="highlight highlight-source-js-jsx"><pre><span class="pl-c">// bad</span>
+&lt;<span class="pl-ent"><span class="pl-c1">Foo</span></span>
+  <span class="pl-e">ref</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>myRef<span class="pl-pds">"</span></span>
+/&gt;
+
+<span class="pl-c">// good</span>
+&lt;<span class="pl-ent"><span class="pl-c1">Foo</span></span>
+  <span class="pl-e">ref</span><span class="pl-k">=</span><span class="pl-pse">{</span><span class="pl-s1">(<span class="pl-smi">ref</span>) <span class="pl-k">=&gt;</span><span class="pl-v"> this</span><span class="pl-k">.</span><span class="pl-smi">myRef</span><span class="pl-k"> =</span><span class="pl-smi"> ref</span></span><span class="pl-pse">}</span>
+/&gt;</pre></div>
+</li>
+</ul>
+
+<p><strong><a href="#table-of-contents">⬆ back to top</a></strong></p>
+
+<h2>
+<a id="10-parentheses" class="anchor" href="#10-parentheses" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>10. Parentheses</h2>
 
 <ul>
 <li>
@@ -372,7 +441,7 @@ Regular HTML attributes also typically use double quotes instead of single, so J
 
 <span class="pl-c">// good, when single line</span>
 <span class="pl-en">render</span>() {
-<span class="pl-k">  const</span><span class="pl-smi"> body</span><span class="pl-k"> =</span> &lt;<span class="pl-ent">div</span>&gt;hello&lt;/<span class="pl-ent">div</span>&gt;;
+  <span class="pl-k">const</span> <span class="pl-smi">body</span><span class="pl-k"> =</span> &lt;<span class="pl-ent">div</span>&gt;hello&lt;/<span class="pl-ent">div</span>&gt;;
 <span class="pl-k">  return</span> &lt;<span class="pl-ent"><span class="pl-c1">MyComponent</span></span>&gt;<span class="pl-pse">{</span><span class="pl-s1"><span class="pl-smi">body</span></span><span class="pl-pse">}</span>&lt;/<span class="pl-ent"><span class="pl-c1">MyComponent</span></span>&gt;;
 }</pre></div>
 </li>
@@ -381,7 +450,7 @@ Regular HTML attributes also typically use double quotes instead of single, so J
 <p><strong><a href="#table-of-contents">⬆ back to top</a></strong></p>
 
 <h2>
-<a id="10-tags" class="anchor" href="#10-tags" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>10. Tags</h2>
+<a id="11-tags" class="anchor" href="#11-tags" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>11. Tags</h2>
 
 <ul>
 <li>
@@ -412,7 +481,7 @@ Regular HTML attributes also typically use double quotes instead of single, so J
 <p><strong><a href="#table-of-contents">⬆ back to top</a></strong></p>
 
 <h2>
-<a id="11-methods" class="anchor" href="#11-methods" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>11. Methods</h2>
+<a id="12-methods" class="anchor" href="#12-methods" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>12. Methods</h2>
 
 <ul>
 <li>
@@ -505,7 +574,7 @@ Regular HTML attributes also typically use double quotes instead of single, so J
 <p><strong><a href="#table-of-contents">⬆ back to top</a></strong></p>
 
 <h2>
-<a id="12-ordering" class="anchor" href="#12-ordering" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>12. Ordering</h2>
+<a id="13-ordering" class="anchor" href="#13-ordering" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>13. Ordering</h2>
 
 <ul>
 <li><p>Ordering for <code>class extends React.Component</code>:</p></li>
@@ -540,18 +609,18 @@ Regular HTML attributes also typically use double quotes instead of single, so J
 
 <div class="highlight highlight-source-js-jsx"><pre><span class="pl-k">import</span><span class="pl-smi"> React</span>, {<span class="pl-smi"> PropTypes</span> }<span class="pl-k"> from</span> <span class="pl-s"><span class="pl-pds">'</span>react<span class="pl-pds">'</span></span>;
 
-<span class="pl-k">const</span><span class="pl-smi"> propTypes</span> <span class="pl-k">=</span> {
+<span class="pl-k">const</span> <span class="pl-smi">propTypes</span> <span class="pl-k">=</span> {
 <span class="pl-c1">  <span class="pl-s">id</span>:</span> <span class="pl-smi">PropTypes</span><span class="pl-k">.</span><span class="pl-smi">number</span><span class="pl-k">.</span><span class="pl-smi">isRequired</span>,
 <span class="pl-c1">  <span class="pl-s">url</span>:</span> <span class="pl-smi">PropTypes</span><span class="pl-k">.</span><span class="pl-smi">string</span><span class="pl-k">.</span><span class="pl-smi">isRequired</span>,
 <span class="pl-c1">  <span class="pl-s">text</span>:</span> <span class="pl-smi">PropTypes</span><span class="pl-k">.</span><span class="pl-smi">string</span>,
 };
 
-<span class="pl-k">const</span><span class="pl-smi"> defaultProps</span> <span class="pl-k">=</span> {
+<span class="pl-k">const</span> <span class="pl-smi">defaultProps</span> <span class="pl-k">=</span> {
 <span class="pl-c1">  <span class="pl-s">text</span>:</span> <span class="pl-s"><span class="pl-pds">'</span>Hello World<span class="pl-pds">'</span></span>,
 };
 
 <span class="pl-k">class</span> <span class="pl-en">Link</span> <span class="pl-k">extends</span> <span class="pl-en">React</span><span class="pl-k">.</span><span class="pl-smi">Component</span> {
-<span class="pl-k">  static</span> <span class="pl-en">methodsAreOk</span>() {
+  <span class="pl-k">static</span> <span class="pl-en">methodsAreOk</span>() {
 <span class="pl-k">    return</span><span class="pl-c1"> true</span>;
   }
 
@@ -601,7 +670,7 @@ Regular HTML attributes also typically use double quotes instead of single, so J
 <p><strong><a href="#table-of-contents">⬆ back to top</a></strong></p>
 
 <h2>
-<a id="13-ismounted" class="anchor" href="#13-ismounted" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>13. <code>isMounted</code>
+<a id="14-ismounted" class="anchor" href="#14-ismounted" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>14. <code>isMounted</code>
 </h2>
 
 <ul>
@@ -619,7 +688,7 @@ Regular HTML attributes also typically use double quotes instead of single, so J
 <p><strong><a href="#table-of-contents">⬆ back to top</a></strong></p>
 
       <footer class="site-footer">
-        <span class="site-footer-owner"><a href="https://github.com/tipplrio/styleguides">Tipplr React/JSX Style Guide</a> is maintained by <a href="https://github.com/tipplrio">tipplrio</a>.</span>
+        <span class="site-footer-owner"><a href="https://github.com/tipplrio/styleguides">Tipplr JavaScript Style Guide</a> is maintained by <a href="https://github.com/tipplrio">tipplrio</a>.</span>
 
         <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
       </footer>
